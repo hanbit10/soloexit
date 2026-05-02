@@ -1,7 +1,5 @@
 const FoodLog = () => {
-  return (
-    <div>FoodLog</div>
-  )
-}
+  return <div>FoodLog</div>;
+};
 
-export default FoodLog
+export default FoodLog;
