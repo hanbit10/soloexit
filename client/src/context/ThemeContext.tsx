@@ -8,13 +8,11 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState(
-    () =>
-      localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme:dark)").matches
-        ? "dark"
-        : "light"),
-  );
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const saved = localStorage.getItem("theme");
+    // Default to dark if nothing is saved
+    return saved === "light" || saved === "dark" ? saved : "dark";
+  });
 
   //   Update theme when state changes
   useEffect(() => {
@@ -25,7 +23,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev == "light" ? "dark" : "light"));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   return (
@@ -38,7 +36,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context == undefined) {
-    throw new Error("useTheme msut be used within a ThemeProvider");
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }
