@@ -6,12 +6,14 @@ import {
   Target,
   User,
 } from "lucide-react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
-import type { ProfileFormData } from "../types";
+import type { ProfileFormData, UserData } from "../types";
 import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import mockApi from "../assets/mockApi";
+import { goalOptions } from "../assets/assets";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -36,8 +38,35 @@ const Onboarding = () => {
   };
 
   const handleNext = async () => {
-    
-  }
+    if (step === 1) {
+      if (
+        !formData.age ||
+        Number(formData.age) < 13 ||
+        Number(formData.age) > 120
+      ) {
+        return toast("Age is required");
+      }
+    }
+    if (step < totalSteps) {
+      setStep(step + 1);
+    } else {
+      const userData = {
+        ...formData,
+        age: formData.age,
+        weight: formData.weight,
+        height: formData.height ? formData.height : null,
+        createdAt: new Date().toISOString(),
+      };
+      localStorage.setITem("fitnessUser", JSON.stringify(userData));
+      await mockApi.user.update(
+        user?.id || "",
+        userData as unknown as Partial<UserData>,
+      );
+      toast.success("Profile updated successfully");
+      setOnboardingCompleted(true);
+      fetchUser(user?.token || "");
+    }
+  };
 
   return (
     <>
@@ -160,12 +189,27 @@ const Onboarding = () => {
                   </p>
                 </div>
               </div>
+
+              {/* options */}
+              <div className="space-y-4 max-w-lg">
+                {goalOptions.map((option) => (
+                  <button
+                  key= {option.value}
+                  onClick={()=> {}}
+                    className={`onboarding-option-btn ${formData.goal === option.value} && 'ring-2 ring-slate-200`}
+                  >
+                    <span className="text-base text-slate-700 dark:text-slate-200">
+                      {option.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
         {/* Navigation buttons */}
-        <div>
-          <div>
+        <div className="p-6 pb-10 onboarding-wrapper">
+          <div className="flex gap-3 lg:justify-end">
             {step > 1 && (
               <Button
                 variant="secondary"
@@ -178,16 +222,11 @@ const Onboarding = () => {
                 </span>
               </Button>
             )}
-            <Button
-   
-              onClick={ => setStep(step > 1 ? step - 1 : 1)}
-              className="max-lg:flex-1 lg:px-10"
-            >
+            <Button onClick={handleNext} className="max-lg:flex-1 lg:px-10">
               <span className="flex items-center justify-center gap-2">
-                {step === totalSteps ? 'Get Started' : 'Continue'}
+                {step === totalSteps ? "Get Started" : "Continue"}
 
                 <ArrowRight className="w-5 h-5" />
-               
               </span>
             </Button>
           </div>
