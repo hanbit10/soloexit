@@ -13,7 +13,8 @@ import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import mockApi from "../assets/mockApi";
-import { goalOptions } from "../assets/assets";
+import { ageRanges, goalOptions } from "../assets/assets";
+import Slider from "../components/Slider";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -57,7 +58,7 @@ const Onboarding = () => {
         height: formData.height ? formData.height : null,
         createdAt: new Date().toISOString(),
       };
-      localStorage.setITem("fitnessUser", JSON.stringify(userData));
+      localStorage.setItem("fitnessUser", JSON.stringify(userData));
       await mockApi.user.update(
         user?.id || "",
         userData as unknown as Partial<UserData>,
@@ -194,15 +195,70 @@ const Onboarding = () => {
               <div className="space-y-4 max-w-lg">
                 {goalOptions.map((option) => (
                   <button
-                  key= {option.value}
-                  onClick={()=> {}}
-                    className={`onboarding-option-btn ${formData.goal === option.value} && 'ring-2 ring-slate-200`}
+                    key={option.value}
+                    onClick={() => {
+                      const age = Number(formData.age);
+                      const range =
+                        ageRanges.find((r) => age <= r.max) ||
+                        ageRanges[ageRanges.length - 1];
+
+                      let intake = range.maintain;
+                      let burn = range.burn;
+
+                      if (option.value === "lose") {
+                        intake -= 400;
+                        burn += 100;
+                      } else if (option.value === "gain") {
+                        intake += 500;
+                        burn -= 100;
+                      }
+
+                      setFormData({
+                        ...formData,
+                        goal: option.value as "lose" | "maintain" | "gain",
+                        dailyCalorieIntake: intake,
+                        dailyCalorieBurn: burn,
+                      });
+                    }}
+                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2 ring-slate-200"}`}
                   >
                     <span className="text-base text-slate-700 dark:text-slate-200">
                       {option.label}
                     </span>
                   </button>
                 ))}
+              </div>
+
+              <div className="border-t border-slate-200 dark:border-slate-700 my-6 max-w-lg"></div>
+
+              {/* Daily Targets */}
+              <div className="space-y-8 max-w-lg">
+                <h3 className="text-md font-medium text-slate-800 dark:text-white mb-4">
+                  Daily Targets
+                </h3>
+                <div className="space-y-6">
+                  <Slider
+                    label="Daily Calorie Intake"
+                    min={120}
+                    max={4000}
+                    step={50}
+                    value={formData.dailyCalorieIntake}
+                    onChange={(v) => updateField("dailyCalorieIntake", v)}
+                    unit="kcal"
+                    infoText="The total calories you plan to consume each day"
+                  />
+
+                  <Slider
+                    label="Daily Calorie Burn"
+                    min={100}
+                    max={2000}
+                    step={50}
+                    value={formData.dailyCalorieBurn}
+                    onChange={(v) => updateField("dailyCalorieBurn", v)}
+                    unit="kcal"
+                    infoText="The total calories you aim to burn through exercise and activity each day."
+                  />
+                </div>
               </div>
             </div>
           )}
