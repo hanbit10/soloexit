@@ -22,7 +22,7 @@ export default function Button({
 
   const variants = {
     primary:
-      "bg-slate-200 text-black hover:bg-slate-300 focus:ring-emerald-500 active:scale-[0.98]",
+      "bg-slate-200 text-black hover:bg-slate-300 focus:ring-slate-500 active:scale-[0.98]",
     secondary:
       "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 focus:ring-slate-400",
     danger:
