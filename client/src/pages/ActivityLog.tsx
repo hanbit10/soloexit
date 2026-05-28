@@ -79,7 +79,23 @@ const ActivityLog = () => {
     setFormData({ ...formData, duration, calories });
   };
 
-  const handleDelete = async (documentId: string) => {};
+  const handleDelete = async (documentId: string) => {
+    try {
+      const confirm = window.confirm(
+        "Are you sure you want to delete this activity?",
+      );
+      if (!confirm) return;
+
+      await mockApi.activityLogs.delete(documentId);
+
+      setAllActivityLogs((prev) =>
+        prev.filter((e) => e.documentId !== documentId),
+      );
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message || "Failed to delete activity");
+    }
+  };
 
   const totalMinutes: number = activities.reduce(
     (sum, a) => sum + a.duration,
