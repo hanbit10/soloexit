@@ -1,13 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import {
-  initialState,
-  type ActivityEntry,
-  type Credentials,
-  type FoodEntry,
-  type User,
-} from "../types";
+import { initialState, type ActivityEntry, type Credentials, type FoodEntry, type User } from "../types";
 import { useNavigate } from "react-router-dom";
 import mockApi from "../assets/mockApi";
+import api from "../configs/api";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const AppContext = createContext(initialState);
 
@@ -20,12 +17,24 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [allActivityLogs, setAllActivityLogs] = useState<ActivityEntry[]>([]);
 
   const signup = async (credentials: Credentials) => {
-    const { data } = await mockApi.auth.register(credentials);
-    setUser(data.user);
-    if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
-      setOnboardingCompleted(true);
+    try {
+      const { data } = await api.post("/api/auth/local/register", credentials);
+
+      setUser({ ...data.user, token: data.jwt });
+      if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
+        setOnboardingCompleted(true);
+      }
+      localStorage.setItem("token", data.jwt);
+      api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Failed to signup");
+      } else {
+        toast.error("Failed to signup");
+      }
     }
-    localStorage.setItem("token", data.jwt);
   };
 
   const login = async (credentials: Credentials) => {
@@ -64,16 +73,19 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      (async () => {
+    const init = async () => {
+      const token = localStorage.getItem("token");
+
+      if (token) {
         await fetchUser(token);
         await fetchFoodLogs();
         await fetchActivityLogs();
-      })();
-    } else {
+      }
+
       setIsUserFetched(true);
-    }
+    };
+
+    init();
   }, []);
 
   const value = {
