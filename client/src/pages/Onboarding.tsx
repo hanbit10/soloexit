@@ -1,20 +1,15 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  PersonStanding,
-  ScaleIcon,
-  Target,
-  User,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, PersonStanding, ScaleIcon, Target, User } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
-import type { ProfileFormData, UserData } from "../types";
+import type { ProfileFormData } from "../types";
 import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import mockApi from "../assets/mockApi";
+// import mockApi from "../assets/mockApi";
 import { ageRanges, goalOptions } from "../assets/assets";
 import Slider from "../components/Slider";
+import api from "../configs/api";
+import { AxiosError } from "axios";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -31,20 +26,13 @@ const Onboarding = () => {
 
   const totalSteps = 3;
 
-  const updateField = (
-    field: keyof ProfileFormData,
-    value: string | number,
-  ) => {
+  const updateField = (field: keyof ProfileFormData, value: string | number) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleNext = async () => {
     if (step === 1) {
-      if (
-        !formData.age ||
-        Number(formData.age) < 13 ||
-        Number(formData.age) > 120
-      ) {
+      if (!formData.age || Number(formData.age) < 13 || Number(formData.age) > 120) {
         return toast("Age is required");
       }
     }
@@ -59,13 +47,25 @@ const Onboarding = () => {
         createdAt: new Date().toISOString(),
       };
       localStorage.setItem("fitnessUser", JSON.stringify(userData));
-      await mockApi.user.update(
-        user?.id || "",
-        userData as unknown as Partial<UserData>,
-      );
-      toast.success("Profile updated successfully");
-      setOnboardingCompleted(true);
-      fetchUser(user?.token || "");
+      // await mockApi.user.update(
+      //   user?.id || "",
+      //   userData as unknown as Partial<UserData>,
+      // );
+
+      try {
+        await api.put(`/api/users/${user?.id}`, userData);
+        toast.success("Profile updated successfully");
+        setOnboardingCompleted(true);
+        fetchUser(user?.token || "");
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.message);
+        } else if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Failed to update profile");
+        }
+      }
     }
   };
 
@@ -79,23 +79,16 @@ const Onboarding = () => {
             <div className="w-10 h-10 rounded-xl bg-gray-400 flex items-center justify-center">
               <PersonStanding className="w-6 h-6 text-slate-200" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
-              SoloExit
-            </h1>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">SoloExit</h1>
           </div>
-          <p className=" text-slate-800 dark:text-white">
-            Let's personalize your experience
-          </p>
+          <p className=" text-slate-800 dark:text-white">Let's personalize your experience</p>
         </div>
 
         {/* Progress Indicator */}
         <div className="px-6 mb-8 onboarding-wrapper">
           <div className="flex gap-2 max-w-2xl">
             {[1, 2, 3].map((s) => (
-              <div
-                key={s}
-                className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${s <= step ? "bg-white" : "bg-slate-400 dark:bg-slate800"}`}
-              />
+              <div key={s} className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${s <= step ? "bg-white" : "bg-slate-400 dark:bg-slate800"}`} />
             ))}
           </div>
           <p className="text-sm text-slate-400 mt-3 ">
@@ -112,12 +105,8 @@ const Onboarding = () => {
                   <User className="size-6 text-slate-600 dark:text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-                    How old are you?
-                  </h2>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">
-                    This helps us calculate your needs
-                  </p>
+                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">How old are you?</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">This helps us calculate your needs</p>
                 </div>
               </div>
               <Input
@@ -141,12 +130,8 @@ const Onboarding = () => {
                   <ScaleIcon className="size-6 text-slate-600 dark:text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-                    Your measurements
-                  </h2>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">
-                    Help us track your progress
-                  </p>
+                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Your measurements</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">Help us track your progress</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 max-w-2xl">
@@ -182,12 +167,8 @@ const Onboarding = () => {
                   <Target className="size-6 text-slate-600 dark:text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-                    What's your goal?
-                  </h2>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">
-                    We'll tailor your experience
-                  </p>
+                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white">What's your goal?</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">We'll tailor your experience</p>
                 </div>
               </div>
 
@@ -198,9 +179,7 @@ const Onboarding = () => {
                     key={option.value}
                     onClick={() => {
                       const age = Number(formData.age);
-                      const range =
-                        ageRanges.find((r) => age <= r.max) ||
-                        ageRanges[ageRanges.length - 1];
+                      const range = ageRanges.find((r) => age <= r.max) || ageRanges[ageRanges.length - 1];
 
                       let intake = range.maintain;
                       let burn = range.burn;
@@ -222,9 +201,7 @@ const Onboarding = () => {
                     }}
                     className={`onboarding-option-btn ${formData.goal === option.value && "ring-2 ring-slate-200"}`}
                   >
-                    <span className="text-base text-slate-700 dark:text-slate-200">
-                      {option.label}
-                    </span>
+                    <span className="text-base text-slate-700 dark:text-slate-200">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -233,9 +210,7 @@ const Onboarding = () => {
 
               {/* Daily Targets */}
               <div className="space-y-8 max-w-lg">
-                <h3 className="text-md font-medium text-slate-800 dark:text-white mb-4">
-                  Daily Targets
-                </h3>
+                <h3 className="text-md font-medium text-slate-800 dark:text-white mb-4">Daily Targets</h3>
                 <div className="space-y-6">
                   <Slider
                     label="Daily Calorie Intake"
@@ -267,11 +242,7 @@ const Onboarding = () => {
         <div className="p-6 pb-10 onboarding-wrapper">
           <div className="flex gap-3 lg:justify-end">
             {step > 1 && (
-              <Button
-                variant="secondary"
-                onClick={() => setStep(step > 1 ? step - 1 : 1)}
-                className="max-lg:flex-1 lg:px-10"
-              >
+              <Button variant="secondary" onClick={() => setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
                 <span className="flex items-center justify-center gap-2">
                   <ArrowLeft className="w-5 h-5" />
                   Back

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { initialState, type ActivityEntry, type Credentials, type FoodEntry, type User } from "../types";
 import { useNavigate } from "react-router-dom";
-import mockApi from "../assets/mockApi";
+// import mockApi from "../assets/mockApi";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -11,7 +11,7 @@ const AppContext = createContext(initialState);
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User>(null);
-  const [isUserFetched, setIsUserFetched] = useState(false);
+  const [isUserFetched, setIsUserFetched] = useState(localStorage.getItem("token") ? false : true);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
   const [allFoodLogs, setAllFoodLogs] = useState<FoodEntry[]>([]);
   const [allActivityLogs, setAllActivityLogs] = useState<ActivityEntry[]>([]);
@@ -30,38 +30,59 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(error);
 
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message || "Failed to signup");
-      } else {
-        toast.error("Failed to signup");
+        toast.error(error?.response?.data?.error?.message || "Failed to signup");
       }
     }
   };
 
   const login = async (credentials: Credentials) => {
-    const { data } = await mockApi.auth.login(credentials);
-    setUser({ ...data.user, token: data.jwt });
-    if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
-      setOnboardingCompleted(true);
+    try {
+      const { data } = await api.post("/api/auth/local", { identifier: credentials.email, password: credentials.password });
+      setUser({ ...data.user, token: data.jwt });
+
+      if (data?.user?.age && data?.user?.weight && data?.user?.goal) {
+        setOnboardingCompleted(true);
+      }
+      localStorage.setItem("token", data.jwt);
+      api.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.error?.message || "Failed to signup");
+      }
     }
-    localStorage.setItem("token", data.jwt);
   };
 
   const fetchUser = async (token: string) => {
-    const { data } = await mockApi.user.me();
+    const { data } = await api.get("/api/users/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setUser({ ...data, token });
     if (data?.age && data?.weight && data?.goal) {
       setOnboardingCompleted(true);
     }
+
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setIsUserFetched(true);
   };
 
-  const fetchFoodLogs = async () => {
-    const { data } = await mockApi.foodLogs.list();
+  const fetchFoodLogs = async (token: string) => {
+    const { data } = await api.get("/api/food-logs", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setAllFoodLogs(data);
   };
 
-  const fetchActivityLogs = async () => {
-    const { data } = await mockApi.activityLogs.list();
+  const fetchActivityLogs = async (token: string) => {
+    const { data } = await api.get("/api/activity-logs", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setAllActivityLogs(data);
   };
 
@@ -69,6 +90,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("token");
     setUser(null);
     setOnboardingCompleted(false);
+    api.defaults.headers.common["Authorization"] = "";
     navigate("/");
   };
 
@@ -78,11 +100,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (token) {
         await fetchUser(token);
-        await fetchFoodLogs();
-        await fetchActivityLogs();
+        await fetchFoodLogs(token);
+        await fetchActivityLogs(token);
       }
 
-      setIsUserFetched(true);
+      // setIsUserFetched(true);
     };
 
     init();
