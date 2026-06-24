@@ -11,13 +11,17 @@ export default factories.createCoreController("api::food-log.food-log", ({ strap
     if (!user) {
       return ctx.unauthorized("Login required");
     }
-    const body = ctx.request.body.data;
-    body.user_permissions_user = user.id;
+
+    const { data } = ctx.request.body;
 
     const entry = await strapi.entityService.create("api::food-log.food-log", {
-      data: body,
+      data: {
+        ...data,
+        users_permissions_user: user.id,
+      },
       populate: ["users_permissions_user"],
     });
+
     return entry;
   },
 

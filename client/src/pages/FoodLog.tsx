@@ -1,26 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FormData } from "../types";
 import Card from "../components/ui/Card";
-import {
-  mealColors,
-  mealIcons,
-  mealTypeOptions,
-  quickActivities,
-  quickActivitiesFoodLog,
-} from "../assets/assets";
+import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import Button from "../components/Button";
-import {
-  Loader2Icon,
-  PlusIcon,
-  SparkleIcon,
-  Trash2Icon,
-  UtensilsCrossedIcon,
-} from "lucide-react";
+import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
 import Input from "../components/Input";
 import Select from "../components/Select";
-import mockApi from "../assets/mockApi";
+// import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
+import api from "../configs/api";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
@@ -38,19 +29,14 @@ const FoodLog = () => {
   const today = new Date().toISOString().split("T")[0];
 
   const loadEntries = () => {
-    const todaysEntries = allFoodLogs.filter(
-      (e: FoodEntry) => e.createdAt?.split("T")[0] === today,
-    );
+    const todaysEntries = allFoodLogs.filter((e: FoodEntry) => e.createdAt?.split("T")[0] === today);
     setEntries(todaysEntries);
   };
 
   const totalCalories = entries.reduce((sum, e) => sum + e.calories, 0);
 
   //group entries by meal type
-  const groupedEntries: Record<
-    "breakfast" | "lunch" | "dinner" | "snack",
-    FoodEntry[]
-  > = entries.reduce(
+  const groupedEntries: Record<"breakfast" | "lunch" | "dinner" | "snack", FoodEntry[]> = entries.reduce(
     (acc, entry) => {
       if (!acc[entry.mealType]) acc[entry.mealType] = [];
       acc[entry.mealType].push(entry);
@@ -61,19 +47,27 @@ const FoodLog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data } = await mockApi.foodLogs.create({ data: formData });
-    setAllFoodLogs((prev) => [...prev, data]);
-    setFormData({ name: "", calories: 0, mealType: "" });
-    setShowForm(false);
+
+    if (!formData.name.trim() || !formData.calories || formData.calories <= 0 || !formData.mealType) {
+      return toast("Please enter valid data");
+    }
+
+    try {
+      const { data } = await api.post("/api/food-logs", { data: formData });
+      setAllFoodLogs((prev) => [...prev, data]);
+      setFormData({ name: "", calories: 0, mealType: "" });
+      setShowForm(false);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message || "Failed to add food");
+    }
   };
 
   const handleDelete = async (documentId: string) => {
     try {
-      const confirm = window.confirm(
-        "Are you sure you want to delete this entry?",
-      );
+      const confirm = window.confirm("Are you sure you want to delete this entry?");
       if (!confirm) return;
-      await mockApi.foodLogs.delete(documentId);
+      await api.delete(`/api/food-logs/${documentId}`);
       setAllFoodLogs((prev) => prev.filter((e) => e.documentId !== documentId));
     } catch (error: any) {
       console.log(error);
@@ -89,6 +83,43 @@ const FoodLog = () => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const { data } = await api.post("/api/image-analysis", formData);
+      const result = data.result;
+      let mealType = "";
+
+      const hour = new Date().getHours();
+
+      if (hour >= 0 && hour < 12) {
+        mealType = "breakfast";
+      } else if (hour >= 12 && hour < 18) {
+        mealType = "lunch";
+      } else {
+        mealType = "dinner";
+      }
+
+      if (!mealType || !result.calories || !result.name) {
+        return toast.error("Failed to add food");
+      }
+
+      // Save the result to the database
+      const { data: newEntry } = await api.post("/api/food-logs", { data: { name: result.name, calories: result.calories, mealType } });
+      setEntries([...entries, newEntry]);
+
+      //reset input
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message || "Failed to add food");
+    } finally {
+      setLoading(false);
+    }
     //Implement image analysis
   };
 
@@ -104,20 +135,12 @@ const FoodLog = () => {
       <div className="page-header">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">
-              Food Log
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-              Track your daily intake
-            </p>
+            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">Food Log</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Track your daily intake</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Today's Total
-            </p>
-            <p className="text-xl font-bold text-slate-600 dark:text-slate-200">
-              {totalCalories} kcal
-            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Today's Total</p>
+            <p className="text-xl font-bold text-slate-600 dark:text-slate-200">{totalCalories} kcal</p>
           </div>
         </div>
       </div>
@@ -126,9 +149,7 @@ const FoodLog = () => {
         {!showForm && (
           <div className="space-y-4">
             <Card>
-              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">
-                Quick Add
-              </h3>
+              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
               <div className="flex flex-wrap gap-2 ">
                 {quickActivitiesFoodLog.map((activity) => (
                   <button
@@ -157,13 +178,7 @@ const FoodLog = () => {
               AI Food Snap
             </Button>
 
-            <input
-              onChange={handleImageChange}
-              type="file"
-              accept="image/*"
-              hidden
-              ref={inputRef}
-            />
+            <input onChange={handleImageChange} type="file" accept="image/*" hidden ref={inputRef} />
             {loading && (
               <div className="fixed inset-0 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur flex items-center justify-center z-100">
                 <Loader2Icon className="size-8 text-slate-600 dark:text-slate-200 animate-spin" />
@@ -175,17 +190,13 @@ const FoodLog = () => {
         {/* Add Form */}
         {showForm && (
           <Card className="border-2 border-slate-600 dark:border-slate-200">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
-              New Food Entry
-            </h3>
+            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">New Food Entry</h3>
 
             <form className="space-y-4" action="" onSubmit={handleSubmit}>
               <Input
                 label="Food Name"
                 value={formData.name}
-                onChange={(v) =>
-                  setFormData({ ...formData, name: v.toString() })
-                }
+                onChange={(v) => setFormData({ ...formData, name: v.toString() })}
                 placeholder="e.g., Grilled Chicken Salad"
                 required
               />
@@ -194,9 +205,7 @@ const FoodLog = () => {
                 label="Calories"
                 type="number"
                 value={formData.calories}
-                onChange={(v) =>
-                  setFormData({ ...formData, calories: Number(v) })
-                }
+                onChange={(v) => setFormData({ ...formData, calories: Number(v) })}
                 placeholder="e.g., 350"
                 required
                 min={1}
@@ -205,9 +214,7 @@ const FoodLog = () => {
               <Select
                 label="Meal Type"
                 value={formData.mealType}
-                onChange={(v) =>
-                  setFormData({ ...formData, mealType: v.toString() })
-                }
+                onChange={(v) => setFormData({ ...formData, mealType: v.toString() })}
                 options={mealTypeOptions}
                 placeholder="Select meal type"
                 required
@@ -239,12 +246,8 @@ const FoodLog = () => {
             <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
               <UtensilsCrossedIcon className="size-8 text-slate-400 dark:text-slate-500" />
             </div>
-            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">
-              No food logged today
-            </h3>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">
-              Start tracking your meals to stay on target
-            </p>
+            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">No food logged today</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Start tracking your meals to stay on target</p>
           </Card>
         ) : (
           <div className="space-y-4">
@@ -254,50 +257,33 @@ const FoodLog = () => {
               if (!groupedEntries[mealTypeKey]) return null;
 
               const MealIcon = mealIcons[mealTypeKey];
-              const mealCalories = groupedEntries[mealTypeKey].reduce(
-                (sum, e) => sum + e.calories,
-                0,
-              );
+              const mealCalories = groupedEntries[mealTypeKey].reduce((sum, e) => sum + e.calories, 0);
 
               return (
                 <Card key={mealType}>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center ${mealColors[mealTypeKey]}`}
-                      >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${mealColors[mealTypeKey]}`}>
                         <MealIcon className="size-5" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-slate-800 dark:text-white capitalize">
-                          {mealType}
-                        </h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          {groupedEntries[mealTypeKey].length} items
-                        </p>
+                        <h3 className="font-semibold text-slate-800 dark:text-white capitalize">{mealType}</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">{groupedEntries[mealTypeKey].length} items</p>
                       </div>
                     </div>
-                    <p className="font-semibold text-slate-700 dark:text-slate-200">
-                      {mealCalories} kcal
-                    </p>
+                    <p className="font-semibold text-slate-700 dark:text-slate-200">{mealCalories} kcal</p>
                   </div>
                   <div className="space-y-2">
                     {groupedEntries[mealTypeKey].map((entry) => (
                       <div key={entry.id} className="food-entry-item">
                         <div className="flex-1">
-                          <p className="font-medium text-slate-700 dark:text-slate-200">
-                            {entry.name}
-                          </p>
+                          <p className="font-medium text-slate-700 dark:text-slate-200">{entry.name}</p>
                           <p className="text-sm text-slate-400">{}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                            {entry.calories} kcal
-                          </span>
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{entry.calories} kcal</span>
                           <button
-                            onClick={() =>
-                              handleDelete(entry?.documentId || "")
-                            }
+                            onClick={() => handleDelete(entry?.documentId || "")}
                             className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                           >
                             <Trash2Icon className="w-4 h-4" />

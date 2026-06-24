@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
+
 const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const analyzeImage = async (filePath: string) => {
@@ -8,36 +9,41 @@ export const analyzeImage = async (filePath: string) => {
       encoding: "base64",
     });
 
-    const config = {
-      responseMimeType: "application/json",
-      responseJsonSchema: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-          },
-          calories: {
-            type: "number",
-          },
-        },
-      },
-    };
-
-    const interaction = await client.interactions.create({
+    // Use standard generateContent for stateless, low-latency execution
+    const response = await client.models.generateContent({
       model: "gemini-3.5-flash",
-      input: [
-        { type: "text", text: "Extract the food name and estimated calories from the image and return the results in JSON format." },
+      contents: [
         {
-          type: "image",
-          data: base64ImageFile,
-          mime_type: "image/jpeg",
+          text: "Analyze this image and return the meal name and estimated calories.",
+        },
+        {
+          inlineData: {
+            data: base64ImageFile,
+            mimeType: "image/jpeg",
+          },
         },
       ],
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            name: { type: "STRING" },
+            calories: { type: "NUMBER" },
+          },
+          required: ["name", "calories"],
+        },
+      },
     });
 
-    return JSON.parse(interaction.output_text);
+    // response.text handles text extraction safely
+    if (!response.text) {
+      throw new Error("No response text received from Gemini.");
+    }
+
+    return JSON.parse(response.text);
   } catch (error) {
-    console.error(error);
+    console.error("Error analyzing image:", error);
     throw error;
   }
 };
