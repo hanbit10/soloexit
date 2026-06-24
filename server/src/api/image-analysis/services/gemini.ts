@@ -9,9 +9,7 @@ export const analyzeImage = async (filePath: string) => {
       encoding: "base64",
     });
 
-    // Use standard generateContent for stateless, low-latency execution
-    const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
+    const payload = {
       contents: [
         {
           text: "Analyze this image and return the meal name and estimated calories.",
@@ -34,9 +32,30 @@ export const analyzeImage = async (filePath: string) => {
           required: ["name", "calories"],
         },
       },
-    });
+    };
 
-    // response.text handles text extraction safely
+    let response;
+
+    try {
+      // Option A: Shift your primary model to Flash-Lite for high-throughput stability
+      response = await client.models.generateContent({
+        model: "gemini-3.1-flash-lite",
+        ...payload,
+      });
+    } catch (primaryError: any) {
+      if (primaryError?.status === 503 || primaryError?.status === 429) {
+        console.warn("Primary Lite model busy. Dropping down to 2.5 Lite...");
+
+        // Option B: Secondary safety valve
+        response = await client.models.generateContent({
+          model: "gemini-2.5-flash-lite",
+          ...payload,
+        });
+      } else {
+        throw primaryError;
+      }
+    }
+
     if (!response.text) {
       throw new Error("No response text received from Gemini.");
     }

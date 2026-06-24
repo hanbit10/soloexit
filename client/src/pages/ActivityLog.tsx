@@ -1,20 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry } from "../types";
 import Card from "../components/ui/Card";
 import { quickActivities } from "../assets/assets";
-import {
-  ActivityIcon,
-  Dumbbell,
-  DumbbellIcon,
-  PlusIcon,
-  TimerIcon,
-  Trash2Icon,
-} from "lucide-react";
+import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import toast from "react-hot-toast";
-import mockApi from "../assets/mockApi";
+// import mockApi from "../assets/mockApi";
+import api from "../configs/api";
 
 const ActivityLog = () => {
   const { allActivityLogs, setAllActivityLogs } = useAppContext();
@@ -31,9 +26,7 @@ const ActivityLog = () => {
   const today = new Date().toISOString().split("T")[0];
 
   const loadActivities = () => {
-    const todaysActivities = allActivityLogs.filter(
-      (a: ActivityEntry) => a.createdAt?.split("T")[0] === today,
-    );
+    const todaysActivities = allActivityLogs.filter((a: ActivityEntry) => a.createdAt?.split("T")[0] === today);
     setActivities(todaysActivities);
   };
 
@@ -49,7 +42,7 @@ const ActivityLog = () => {
       return toast("Please enter valid data");
     }
     try {
-      const { data } = await mockApi.activityLogs.create({ data: formData });
+      const { data } = await api.post("/api/activity-logs", { data: formData });
       setAllActivityLogs((prev) => [...prev, data]);
       setFormData({ name: "", duration: 0, calories: 0 });
       setShowForm(false);
@@ -81,26 +74,19 @@ const ActivityLog = () => {
 
   const handleDelete = async (documentId: string) => {
     try {
-      const confirm = window.confirm(
-        "Are you sure you want to delete this activity?",
-      );
+      const confirm = window.confirm("Are you sure you want to delete this activity?");
       if (!confirm) return;
 
-      await mockApi.activityLogs.delete(documentId);
+      await api.delete(`/api/activity-logs/${documentId}`);
 
-      setAllActivityLogs((prev) =>
-        prev.filter((e) => e.documentId !== documentId),
-      );
+      setAllActivityLogs((prev) => prev.filter((e) => e.documentId !== documentId));
     } catch (error: any) {
       console.log(error);
       toast.error(error?.message || "Failed to delete activity");
     }
   };
 
-  const totalMinutes: number = activities.reduce(
-    (sum, a) => sum + a.duration,
-    0,
-  );
+  const totalMinutes: number = activities.reduce((sum, a) => sum + a.duration, 0);
 
   return (
     <div className="page-container">
@@ -108,20 +94,12 @@ const ActivityLog = () => {
       <div className="page-header">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">
-              Activity Log
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-              Track your workouts
-            </p>
+            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">Activity Log</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Track your workouts</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Active Today
-            </p>
-            <p className="text-xl font-bold text-blue-600 dark:text-blue-200">
-              {totalMinutes} min
-            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Active Today</p>
+            <p className="text-xl font-bold text-blue-600 dark:text-blue-200">{totalMinutes} min</p>
           </div>
         </div>
       </div>
@@ -131,9 +109,7 @@ const ActivityLog = () => {
         {!showForm && (
           <div className="space-y-4">
             <Card>
-              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">
-                Quick Add
-              </h3>
+              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
               <div className="flex flex-wrap gap-2">
                 {quickActivities.map((activity) => (
                   <button
@@ -156,17 +132,13 @@ const ActivityLog = () => {
         {/* Add Form */}
         {showForm && (
           <Card className="border-2 border-blue-200 dark:border-blue-800">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
-              New Activity
-            </h3>
+            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">New Activity</h3>
             <form className="space-y-4" onSubmit={handleSubmit} action="">
               <Input
                 label="Activity Name"
                 placeholder="e.g., Morning Run"
                 value={formData.name}
-                onChange={(v) =>
-                  setFormData({ ...formData, name: v.toString() })
-                }
+                onChange={(v) => setFormData({ ...formData, name: v.toString() })}
                 required
               />
 
@@ -191,9 +163,7 @@ const ActivityLog = () => {
                   min={1}
                   max={2000}
                   value={formData.calories}
-                  onChange={(v) =>
-                    setFormData({ ...formData, calories: Number(v) })
-                  }
+                  onChange={(v) => setFormData({ ...formData, calories: Number(v) })}
                   required
                 />
               </div>
@@ -225,12 +195,8 @@ const ActivityLog = () => {
             <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
               <DumbbellIcon className="w-8 h-8 text-slate-400 dark:text-slate-500" />
             </div>
-            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">
-              No activities logged today
-            </h3>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">
-              Start moving and track your progress
-            </p>
+            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">No activities logged today</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Start moving and track your progress</p>
           </Card>
         ) : (
           <Card>
@@ -239,12 +205,8 @@ const ActivityLog = () => {
                 <ActivityIcon className="size-5 text-blue-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-800 dark:text-white">
-                  Today's Activities
-                </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {activities.length} logged
-                </p>
+                <h3 className="font-semibold text-slate-800 dark:text-white">Today's Activities</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{activities.length} logged</p>
               </div>
             </div>
 
@@ -256,25 +218,16 @@ const ActivityLog = () => {
                       <TimerIcon className="size-5 text-blue-500 dark:text-blue-400" />
                     </div>
                     <div>
-                      <p className="font-medium text-slate-700 dark:text-slate-200">
-                        {activity.name}
-                      </p>
+                      <p className="font-medium text-slate-700 dark:text-slate-200">{activity.name}</p>
                       <p className="text-sm text-slate-400">
-                        {new Date(activity?.createdAt || "").toLocaleTimeString(
-                          "en-US",
-                          { hour: "2-digit", minute: "2-digit" },
-                        )}
+                        {new Date(activity?.createdAt || "").toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <p className="font-semibold text-slate-700 dark:text-slate-200">
-                        {activity.duration} min
-                      </p>
-                      <p className="text-xs text-slate-400">
-                        {activity.calories} kcal
-                      </p>
+                      <p className="font-semibold text-slate-700 dark:text-slate-200">{activity.duration} min</p>
+                      <p className="text-xs text-slate-400">{activity.calories} kcal</p>
                     </div>
                     <button
                       onClick={() => handleDelete(activity.documentId)}
@@ -289,12 +242,8 @@ const ActivityLog = () => {
 
             {/* Total Summary */}
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
-              <span className="text-slate-500 dark:text-slate-400">
-                Total Active Time
-              </span>
-              <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                {totalMinutes} minutes
-              </span>
+              <span className="text-slate-500 dark:text-slate-400">Total Active Time</span>
+              <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{totalMinutes} minutes</span>
             </div>
           </Card>
         )}

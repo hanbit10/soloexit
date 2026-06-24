@@ -108,7 +108,8 @@ const FoodLog = () => {
 
       // Save the result to the database
       const { data: newEntry } = await api.post("/api/food-logs", { data: { name: result.name, calories: result.calories, mealType } });
-      setEntries([...entries, newEntry]);
+      // setEntries([...entries, newEntry]);
+      setAllFoodLogs((prev) => [...prev, newEntry]);
 
       //reset input
       if (inputRef.current) {

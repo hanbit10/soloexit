@@ -1,31 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
-import type { ProfileFormData, UserData } from "../types";
+import type { ProfileFormData } from "../types";
 import Card from "../components/ui/Card";
-import {
-  Calendar,
-  Divide,
-  LogOutIcon,
-  MoonIcon,
-  Scale,
-  SunIcon,
-  Target,
-  User,
-} from "lucide-react";
+import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
 import Button from "../components/Button";
 import { goalLabels, goalOptions } from "../assets/assets";
 import Input from "../components/Input";
 import Select from "../components/Select";
-import mockApi from "../assets/mockApi";
+// import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
+import api from "../configs/api";
 
 const Profile = () => {
-  const { user, logout, fetchUser, allFoodLogs, allActivityLogs } =
-    useAppContext();
-
+  const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();
   const { theme, toggleTheme } = useTheme();
-
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<ProfileFormData>({
     age: 0,
@@ -58,11 +48,12 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       //Mock Api update
-      const updates: Partial<UserData> = {
-        ...formData,
-        goal: formData.goal as "lose" | "maintain" | "gain",
-      };
-      await mockApi.user.update(user?.id || "", updates);
+      // const updates: Partial<UserData> = {
+      //   ...formData,
+      //   goal: formData.goal as "lose" | "maintain" | "gain",
+      // };
+      // await mockApi.user.update(user?.id || "", updates);
+      await api.put(`/api/users/${user?.id}`, formData);
       await fetchUser(user?.token || "");
       toast.success("Profile updated successfully");
     } catch (error: any) {
@@ -85,12 +76,8 @@ const Profile = () => {
     <div className="page-container">
       {/* Header */}
       <div className="page-header">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
-          Profile
-        </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-          Manage your settings
-        </p>
+        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Profile</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your settings</p>
       </div>
       <div className="profile-content">
         {/* left col */}
@@ -101,33 +88,19 @@ const Profile = () => {
               <User className="size-6 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
-                Your Profile
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-xs">
-                Member since{" "}
-                {new Date(user?.createdAt || "").toLocaleDateString()}
-              </p>
+              <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Your Profile</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-xs">Member since {new Date(user?.createdAt || "").toLocaleDateString()}</p>
             </div>
           </div>
           {isEditing ? (
             <div className="space-y-4">
-              <Input
-                label="Age"
-                type="number"
-                value={formData.age}
-                onChange={(v) => setFormData({ ...formData, age: Number(v) })}
-                min={13}
-                max={120}
-              />
+              <Input label="Age" type="number" value={formData.age} onChange={(v) => setFormData({ ...formData, age: Number(v) })} min={13} max={120} />
 
               <Input
                 label="Weight (kg) "
                 type="number"
                 value={formData.weight}
-                onChange={(v) =>
-                  setFormData({ ...formData, weight: Number(v) })
-                }
+                onChange={(v) => setFormData({ ...formData, weight: Number(v) })}
                 min={20}
                 max={300}
               />
@@ -136,9 +109,7 @@ const Profile = () => {
                 label="Height (cm) "
                 type="number"
                 value={formData.height}
-                onChange={(v) =>
-                  setFormData({ ...formData, height: Number(v) })
-                }
+                onChange={(v) => setFormData({ ...formData, height: Number(v) })}
                 min={100}
                 max={250}
               />
@@ -187,12 +158,8 @@ const Profile = () => {
                     <Calendar className="size-4.5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      Age
-                    </p>
-                    <p className="font-semibold text-slate-800 dark:text-white">
-                      {user.age} years
-                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Age</p>
+                    <p className="font-semibold text-slate-800 dark:text-white">{user.age} years</p>
                   </div>
                 </div>
 
@@ -202,12 +169,8 @@ const Profile = () => {
                     <Scale className="size-4.5 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      Weight
-                    </p>
-                    <p className="font-semibold text-slate-800 dark:text-white">
-                      {user.weight} kg
-                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Weight</p>
+                    <p className="font-semibold text-slate-800 dark:text-white">{user.weight} kg</p>
                   </div>
                 </div>
 
@@ -218,12 +181,8 @@ const Profile = () => {
                       <Scale className="size-4.5 text-green-600 dark:text-green-400" />
                     </div>
                     <div>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Height
-                      </p>
-                      <p className="font-semibold text-slate-800 dark:text-white">
-                        {user.height} cm
-                      </p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Height</p>
+                      <p className="font-semibold text-slate-800 dark:text-white">{user.height} cm</p>
                     </div>
                   </div>
                 )}
@@ -235,20 +194,12 @@ const Profile = () => {
                     <Target className="size-4.5 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      Goal
-                    </p>
-                    <p className="font-semibold text-slate-800 dark:text-white">
-                      {goalLabels[user?.goal || "gain"]}
-                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Goal</p>
+                    <p className="font-semibold text-slate-800 dark:text-white">{goalLabels[user?.goal || "gain"]}</p>
                   </div>
                 </div>
               </div>
-              <Button
-                variant="secondary"
-                onClick={() => setIsEditing(true)}
-                className="w-full mt-4"
-              >
+              <Button variant="secondary" onClick={() => setIsEditing(true)} className="w-full mt-4">
                 Edit Profile
               </Button>
             </>
@@ -258,25 +209,15 @@ const Profile = () => {
         <div className="space-y-4">
           {/* stats card */}
           <Card>
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
-              Your Stats
-            </h3>
+            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Your Stats</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                  {stats.totalFoodEntries}
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Food entries
-                </p>
+                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
               </div>
               <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {stats.totalActivities}
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Activities
-                </p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
               </div>
             </div>
           </Card>
@@ -287,23 +228,13 @@ const Profile = () => {
               onClick={toggleTheme}
               className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"
             >
-              {theme === "light" ? (
-                <MoonIcon className="size-5" />
-              ) : (
-                <SunIcon className="size-5" />
-              )}
-              <span className="text-base">
-                {theme === "light" ? "Dark Mode" : "Light Mode"}
-              </span>
+              {theme === "light" ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
+              <span className="text-base">{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
             </button>
           </div>
 
           {/* Logout button */}
-          <Button
-            variant="danger"
-            onClick={logout}
-            className="w-full ring ring-red-300 hover:ring-2"
-          >
+          <Button variant="danger" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
             <LogOutIcon className="size-4" />
             Logout
           </Button>

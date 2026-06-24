@@ -1,4 +1,4 @@
-import { ActivityIcon, HomeIcon, MoonIcon, PersonStanding, PersonStandingIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
+import { ActivityIcon, HomeIcon, MoonIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { NavLink } from "react-router-dom";
 
