@@ -5,7 +5,7 @@ import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FormData } from "../types";
 import Card from "../components/ui/Card";
 import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
-import Button from "../components/Button";
+import { Button } from "../components/ui/button";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
 import Input from "../components/Input";
 import Select from "../components/Select";
@@ -153,13 +153,14 @@ const FoodLog = () => {
               <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
               <div className="flex flex-wrap gap-2 ">
                 {quickActivitiesFoodLog.map((activity) => (
-                  <button
+                  <Button
                     onClick={() => handleQuickAdd(activity.name)}
-                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                    variant="outline"
+                    className="px-4 py-2rounded-xl text-sm font-medium  transition-colors"
                     key={activity.name}
                   >
                     {activity.emoji} {activity.name}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </Card>
@@ -225,7 +226,7 @@ const FoodLog = () => {
                 <Button
                   className="flex-1"
                   type="button"
-                  variant="secondary"
+                  variant="destructive"
                   onClick={() => {
                     setShowForm(false);
                     setFormData({ name: "", calories: 0, mealType: "" });

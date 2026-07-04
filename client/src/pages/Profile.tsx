@@ -5,7 +5,7 @@ import { useTheme } from "../context/ThemeContext";
 import type { ProfileFormData } from "../types";
 import Card from "../components/ui/Card";
 import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
-import Button from "../components/Button";
+import { Button } from "../components/ui/button";
 import { goalLabels, goalOptions } from "../assets/assets";
 import Input from "../components/Input";
 import Select from "../components/Select";
@@ -234,7 +234,7 @@ const Profile = () => {
           </div>
 
           {/* Logout button */}
-          <Button variant="danger" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
+          <Button variant="destructive" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
             <LogOutIcon className="size-4" />
             Logout
           </Button>

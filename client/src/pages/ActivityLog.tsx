@@ -6,7 +6,7 @@ import Card from "../components/ui/Card";
 import { quickActivities } from "../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 import Input from "../components/Input";
-import Button from "../components/Button";
+import { Button } from "../components/ui/button";
 import toast from "react-hot-toast";
 // import mockApi from "../assets/mockApi";
 import api from "../configs/api";
@@ -112,13 +112,14 @@ const ActivityLog = () => {
               <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
               <div className="flex flex-wrap gap-2">
                 {quickActivities.map((activity) => (
-                  <button
+                  <Button
                     onClick={() => handleQuickAdd(activity)}
                     key={activity.name}
-                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                    variant="outline"
+                    className="px-4 py-2 rounded-xl text-sm font-medium transition-colors"
                   >
                     {activity.emoji} {activity.name}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </Card>
@@ -171,7 +172,7 @@ const ActivityLog = () => {
               <div className="flex gap-3 pt-2">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="destructive"
                   className="flex-1"
                   onClick={() => {
                     setShowForm(false);

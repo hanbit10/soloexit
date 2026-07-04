@@ -1,14 +1,9 @@
-import {
-  AtSignIcon,
-  EyeIcon,
-  EyeOffIcon,
-  LockIcon,
-  MailIcon,
-} from "lucide-react";
+import { AtSignIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { Toaster } from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const [state, setState] = useState("login");
@@ -42,21 +37,14 @@ const Login = () => {
       <Toaster />
       <main className="login-page-container">
         <form onSubmit={handleSubmit} className="login-form">
-          <h2 className="text-3xl font-medium text-gray-900 dark:text-white">
-            {state == "login" ? "sign in" : "sign up"}
-          </h2>
+          <h2 className="text-3xl font-medium text-gray-900 dark:text-white">{state == "login" ? "sign in" : "sign up"}</h2>
           <p className="mt-2 text-sm text-gray-500/90 dark:text-gray-400">
-            {state == "login"
-              ? "Please enter email and password to acces."
-              : "Please enter your details to create an account."}
+            {state == "login" ? "Please enter email and password to acces." : "Please enter your details to create an account."}
           </p>
           {/* Username */}
           {state !== "login" && (
             <div className="mt-4">
-              <label
-                htmlFor=""
-                className="font-medium text-sm text-gray-700 dark:text-gray-300"
-              >
+              <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
                 Username
               </label>
               <div className="relative mt-2">
@@ -74,10 +62,7 @@ const Login = () => {
           )}
           {/* Email */}
           <div className="mt-4">
-            <label
-              htmlFor=""
-              className="font-medium text-sm text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
               Email
             </label>
             <div className="relative mt-2">
@@ -94,10 +79,7 @@ const Login = () => {
           </div>
           {/* Password */}
           <div className="mt-4">
-            <label
-              htmlFor=""
-              className="font-medium text-sm text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
               Password
             </label>
             <div className="relative mt-2">
@@ -115,49 +97,32 @@ const Login = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 size-4.5"
                 onClick={() => setShowPassword((p) => !p)}
               >
-                {showPassword ? (
-                  <EyeOffIcon size={16} />
-                ) : (
-                  <EyeIcon size={16} />
-                )}
+                {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
               </button>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="login-button"
-          >
-            {isSubmitting
-              ? "Signing in..."
-              : state === "login"
-                ? "Login"
-                : "Sign up"}
+          <button type="submit" disabled={isSubmitting} className="login-button">
+            {isSubmitting ? "Signing in..." : state === "login" ? "Login" : "Sign up"}
           </button>
 
           {state === "login" ? (
             <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
               Don"t have an account?{" "}
-              <button
-                onClick={() => setState("sign up")}
-                className="ml-1 cursor-pointer text-slate-200 hover:underline"
-              >
+              <button onClick={() => setState("sign up")} className="ml-1 cursor-pointer text-slate-200 hover:underline">
                 Sign up
               </button>
             </p>
           ) : (
             <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
               Already have an account?{" "}
-              <button
-                onClick={() => setState("login")}
-                className="ml-1 cursor-pointer text-slate-200 hover:underline"
-              >
+              <button onClick={() => setState("login")} className="ml-1 cursor-pointer text-slate-200 hover:underline">
                 Login
               </button>
             </p>
           )}
         </form>
+        <Button>Click Me</Button>
       </main>
     </>
   );
