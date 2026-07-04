@@ -7,11 +7,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../compone
 import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { goalLabels, goalOptions } from "../assets/assets";
-import Input from "../components/Input";
-import Select from "../components/Select";
+// import Input from "../components/Input";
+// import Select from "../components/Select";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
 import api from "../configs/api";
+
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Profile = () => {
   const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();
@@ -94,60 +98,90 @@ const Profile = () => {
 
           {isEditing ? (
             <CardContent className="space-y-4">
-              <Input label="Age" type="number" value={formData.age} onChange={(v) => setFormData({ ...formData, age: Number(v) })} min={13} max={120} />
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="age">Age</FieldLabel>
+                  <Input
+                    id="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                    min={13}
+                    max={120}
+                  />
+                </Field>
 
-              <Input
-                label="Weight (kg) "
-                type="number"
-                value={formData.weight}
-                onChange={(v) => setFormData({ ...formData, weight: Number(v) })}
-                min={20}
-                max={300}
-              />
+                <Field>
+                  <FieldLabel htmlFor="weight">Weight</FieldLabel>
+                  <Input
+                    id="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) })}
+                    min={20}
+                    max={300}
+                  />
+                </Field>
 
-              <Input
-                label="Height (cm) "
-                type="number"
-                value={formData.height}
-                onChange={(v) => setFormData({ ...formData, height: Number(v) })}
-                min={100}
-                max={250}
-              />
+                <Field>
+                  <FieldLabel htmlFor="height">Height</FieldLabel>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={formData.height}
+                    onChange={(e) => setFormData({ ...formData, height: Number(e.target.value) })}
+                    min={100}
+                    max={250}
+                  />
+                </Field>
 
-              <Select
-                label="Fitness Goal"
-                value={formData.goal as string}
-                onChange={(v) =>
-                  setFormData({
-                    ...formData,
-                    goal: v as "lose" | "maintain" | "gain",
-                  })
-                }
-                options={goalOptions}
-              />
+                <Field>
+                  <FieldLabel htmlFor="goal">Fitness Goal</FieldLabel>
+                  <Select
+                    id="goal"
+                    value={formData.goal}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        goal: value as "lose" | "maintain" | "gain",
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a goal" />
+                    </SelectTrigger>
 
-              <div className="flex gap-3 pt-2">
-                <Button
-                  variant="secondary"
-                  className="flex-1"
-                  onClick={() => {
-                    setIsEditing(false);
-                    setFormData({
-                      age: Number(user.age),
-                      weight: Number(user.weight),
-                      height: Number(user.height),
-                      goal: user.goal || "",
-                      dailyCalorieIntake: user.dailyCalorieIntake || 2000,
-                      dailyCalorieBurn: user.dailyCalorieBurn || 400,
-                    });
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button className="flex-1" onClick={handleSave}>
-                  Save Changes
-                </Button>
-              </div>
+                    <SelectContent>
+                      <SelectItem value="lose">Lose weight</SelectItem>
+                      <SelectItem value="maintain">Maintain</SelectItem>
+                      <SelectItem value="gain">Gain weight</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    onClick={() => {
+                      setIsEditing(false);
+                      setFormData({
+                        age: Number(user.age),
+                        weight: Number(user.weight),
+                        height: Number(user.height),
+                        goal: user.goal || "",
+                        dailyCalorieIntake: user.dailyCalorieIntake || 2000,
+                        dailyCalorieBurn: user.dailyCalorieBurn || 400,
+                      });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="flex-1" onClick={handleSave}>
+                    Save Changes
+                  </Button>
+                </div>
+              </FieldGroup>
             </CardContent>
           ) : (
             <>

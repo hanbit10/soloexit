@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 const Login = () => {
   const [state, setState] = useState("login");
@@ -37,91 +39,97 @@ const Login = () => {
       <Toaster />
       <main className="login-page-container">
         <form onSubmit={handleSubmit} className="login-form">
-          <h2 className="text-3xl font-medium text-gray-900 dark:text-white">{state == "login" ? "sign in" : "sign up"}</h2>
-          <p className="mt-2 text-sm text-gray-500/90 dark:text-gray-400">
-            {state == "login" ? "Please enter email and password to acces." : "Please enter your details to create an account."}
-          </p>
-          {/* Username */}
-          {state !== "login" && (
-            <div className="mt-4">
-              <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
-                Username
-              </label>
-              <div className="relative mt-2">
-                <AtSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4.5" />
-                <input
-                  onChange={(e) => setUsername(e.target.value)}
-                  value={username}
-                  type="text"
-                  placeholder="enter a username"
-                  className="login-input"
+          <FieldGroup>
+            <h2 className="text-3xl font-medium ">{state == "login" ? "sign in" : "sign up"}</h2>
+            <p className="mt-2 text-sm text-gray-500/90 dark:text-gray-400">
+              {state == "login" ? "Please enter email and password to acces." : "Please enter your details to create an account."}
+            </p>
+            {/* Username */}
+            {state !== "login" && (
+              <Field>
+                <FieldLabel htmlFor="username" className="font-medium text-sm">
+                  Username
+                </FieldLabel>
+                <InputGroup>
+                  <InputGroupAddon>
+                    <AtSignIcon />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    id="username"
+                    onChange={(e) => setUsername(e.target.value)}
+                    value={username}
+                    type="text"
+                    placeholder="enter a username"
+                    required
+                  />
+                </InputGroup>
+              </Field>
+            )}
+            {/* Email */}
+
+            <Field>
+              <FieldLabel htmlFor="email" className="font-medium text-sm">
+                Email
+              </FieldLabel>
+              <InputGroup>
+                <InputGroupAddon>
+                  <MailIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="email"
+                  placeholder="Please enter your email"
                   required
                 />
-              </div>
-            </div>
-          )}
-          {/* Email */}
-          <div className="mt-4">
-            <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
-              Email
-            </label>
-            <div className="relative mt-2">
-              <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4.5" />
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                type="email"
-                placeholder="Please enter your email"
-                className="login-input"
-                required
-              />
-            </div>
-          </div>
-          {/* Password */}
-          <div className="mt-4">
-            <label htmlFor="" className="font-medium text-sm text-gray-700 dark:text-gray-300">
-              Password
-            </label>
-            <div className="relative mt-2">
-              <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4.5" />
-              <input
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                placeholder="Please enter your password"
-                className="login-input pr-10"
-                required
-                type={showPassword ? "text" : "password"}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 size-4.5"
-                onClick={() => setShowPassword((p) => !p)}
-              >
-                {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
-              </Button>
-            </div>
-          </div>
+              </InputGroup>
+            </Field>
 
-          <Button type="submit" disabled={isSubmitting} className="login-button">
-            {isSubmitting ? "Signing in..." : state === "login" ? "Login" : "Sign up"}
-          </Button>
+            {/* Password */}
+            <Field>
+              <FieldLabel htmlFor="password" className="font-medium text-sm">
+                Password
+              </FieldLabel>
+              <InputGroup>
+                <InputGroupAddon>
+                  <LockIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  placeholder="Please enter your password"
+                  required
+                  type={showPassword ? "text" : "password"}
+                />
+                <InputGroupAddon align="inline-end">
+                  <Button type="button" variant="ghost" onClick={() => setShowPassword((p) => !p)}>
+                    {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </Field>
 
-          {state === "login" ? (
-            <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
-              Don"t have an account?{" "}
-              <Button onClick={() => setState("sign up")} variant="link" className="ml-1 cursor-pointer hover:underline">
-                Sign up
-              </Button>
-            </p>
-          ) : (
-            <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
-              Already have an account?{" "}
-              <Button onClick={() => setState("login")} variant="link" className="ml-1 cursor-pointer hover:underline">
-                Login
-              </Button>
-            </p>
-          )}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Signing in..." : state === "login" ? "Login" : "Sign up"}
+            </Button>
+
+            {state === "login" ? (
+              <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+                Don"t have an account?{" "}
+                <Button onClick={() => setState("sign up")} variant="link" className="ml-1 cursor-pointer hover:underline">
+                  Sign up
+                </Button>
+              </p>
+            ) : (
+              <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+                Already have an account?{" "}
+                <Button onClick={() => setState("login")} variant="link" className="ml-1 cursor-pointer hover:underline">
+                  Login
+                </Button>
+              </p>
+            )}
+          </FieldGroup>
         </form>
       </main>
     </>

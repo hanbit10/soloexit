@@ -5,11 +5,14 @@ import type { ActivityEntry } from "../types";
 import { Card, CardContent, CardFooter, CardHeader } from "../components/ui/card";
 import { quickActivities } from "../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
-import Input from "../components/Input";
+// import Input from "../components/Input";
 import { Button } from "../components/ui/button";
 import toast from "react-hot-toast";
 // import mockApi from "../assets/mockApi";
 import api from "../configs/api";
+
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 const ActivityLog = () => {
   const { allActivityLogs, setAllActivityLogs } = useAppContext();
@@ -61,15 +64,22 @@ const ActivityLog = () => {
     setShowForm(true);
   };
 
-  const handleDurationChange = (val: string | number) => {
-    const duration = Number(val);
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const duration = Number(e.target.value);
+
     const activity = quickActivities.find((a) => a.name === formData.name);
+
     let calories = formData.calories;
+
     if (activity) {
       calories = duration * activity.rate;
     }
 
-    setFormData({ ...formData, duration, calories });
+    setFormData((prev) => ({
+      ...prev,
+      duration,
+      calories,
+    }));
   };
 
   const handleDelete = async (documentId: string) => {
@@ -143,56 +153,73 @@ const ActivityLog = () => {
             </CardHeader>
             <CardContent>
               <form className="space-y-4" onSubmit={handleSubmit} action="">
-                <Input
-                  label="Activity Name"
-                  placeholder="e.g., Morning Run"
-                  value={formData.name}
-                  onChange={(v) => setFormData({ ...formData, name: v.toString() })}
-                  required
-                />
-                <div className="flex gap-4">
-                  <Input
-                    label="Duration (min)"
-                    type="number"
-                    className="flex-1"
-                    placeholder="30"
-                    min={1}
-                    max={300}
-                    value={formData.duration}
-                    onChange={handleDurationChange}
-                    required
-                  />
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="activity-name">Activity Name</FieldLabel>
+                    <Input
+                      id="activity-name"
+                      placeholder="e.g., Morning Run"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                    />
+                  </Field>
 
-                  <Input
-                    label="Calories Burned"
-                    type="number"
-                    className="flex-1"
-                    placeholder="200"
-                    min={1}
-                    max={2000}
-                    value={formData.calories}
-                    onChange={(v) => setFormData({ ...formData, calories: Number(v) })}
-                    required
-                  />
-                </div>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                <div className="flex gap-3 pt-2">
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    className="flex-1"
-                    onClick={() => {
-                      setShowForm(false);
-                      setError("");
-                      setFormData({ name: "", duration: 0, calories: 0 });
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="flex-1">
-                    Add Activity
-                  </Button>
-                </div>
+                  <div className="flex gap-4">
+                    <Field>
+                      <FieldLabel htmlFor="duration">Duration (min)</FieldLabel>
+                      <Input
+                        id="duration"
+                        type="number"
+                        className="flex-1"
+                        placeholder="30"
+                        min={1}
+                        max={300}
+                        value={formData.duration}
+                        onChange={handleDurationChange}
+                        required
+                      />
+                    </Field>
+
+                    <Field>
+                      <FieldLabel htmlFor="calories">Calories Burned</FieldLabel>
+                      <Input
+                        id="calories"
+                        type="number"
+                        className="flex-1"
+                        placeholder="200"
+                        min={1}
+                        max={2000}
+                        value={formData.calories}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            calories: Number(e.target.value),
+                          })
+                        }
+                        required
+                      />
+                    </Field>
+                  </div>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="flex-1"
+                      onClick={() => {
+                        setShowForm(false);
+                        setError("");
+                        setFormData({ name: "", duration: 0, calories: 0 });
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="flex-1">
+                      Add Activity
+                    </Button>
+                  </div>
+                </FieldGroup>
               </form>
             </CardContent>
           </Card>
