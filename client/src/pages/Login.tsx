@@ -92,37 +92,37 @@ const Login = () => {
                 required
                 type={showPassword ? "text" : "password"}
               />
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 size-4.5"
                 onClick={() => setShowPassword((p) => !p)}
               >
                 {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
-              </button>
+              </Button>
             </div>
           </div>
 
-          <button type="submit" disabled={isSubmitting} className="login-button">
+          <Button type="submit" disabled={isSubmitting} className="login-button">
             {isSubmitting ? "Signing in..." : state === "login" ? "Login" : "Sign up"}
-          </button>
+          </Button>
 
           {state === "login" ? (
             <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
               Don"t have an account?{" "}
-              <button onClick={() => setState("sign up")} className="ml-1 cursor-pointer text-slate-200 hover:underline">
+              <Button onClick={() => setState("sign up")} variant="link" className="ml-1 cursor-pointer hover:underline">
                 Sign up
-              </button>
+              </Button>
             </p>
           ) : (
             <p className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
               Already have an account?{" "}
-              <button onClick={() => setState("login")} className="ml-1 cursor-pointer text-slate-200 hover:underline">
+              <Button onClick={() => setState("login")} variant="link" className="ml-1 cursor-pointer hover:underline">
                 Login
-              </button>
+              </Button>
             </p>
           )}
         </form>
-        <Button>Click Me</Button>
       </main>
     </>
   );

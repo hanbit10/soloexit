@@ -199,7 +199,7 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              <Button variant="secondary" onClick={() => setIsEditing(true)} className="w-full mt-4">
+              <Button onClick={() => setIsEditing(true)} className="w-full mt-4">
                 Edit Profile
               </Button>
             </>
@@ -224,17 +224,14 @@ const Profile = () => {
 
           {/* toggle theme button for phone */}
           <div className="lg:hidden">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"
-            >
+            <Button onClick={toggleTheme} variant="ghost" className="flex items-center gap-3 px-4 py-2.5 w-full rounded-lg cursor-pointer">
               {theme === "light" ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
               <span className="text-base">{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-            </button>
+            </Button>
           </div>
 
           {/* Logout button */}
-          <Button variant="destructive" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
+          <Button variant="destructive" onClick={logout} className="w-full">
             <LogOutIcon className="size-4" />
             Logout
           </Button>

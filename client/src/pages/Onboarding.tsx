@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import type { ProfileFormData } from "../types";
 import { useState } from "react";
 import Input from "../components/Input";
-import Button from "../components/Button";
+import { Button } from "../components/ui/button";
 // import mockApi from "../assets/mockApi";
 import { ageRanges, goalOptions } from "../assets/assets";
 import Slider from "../components/Slider";
@@ -175,7 +175,7 @@ const Onboarding = () => {
               {/* options */}
               <div className="space-y-4 max-w-lg">
                 {goalOptions.map((option) => (
-                  <button
+                  <Button
                     key={option.value}
                     onClick={() => {
                       const age = Number(formData.age);
@@ -199,10 +199,10 @@ const Onboarding = () => {
                         dailyCalorieBurn: burn,
                       });
                     }}
-                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2 ring-slate-200"}`}
+                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2"}`}
                   >
                     <span className="text-base text-slate-700 dark:text-slate-200">{option.label}</span>
-                  </button>
+                  </Button>
                 ))}
               </div>
 
@@ -242,7 +242,7 @@ const Onboarding = () => {
         <div className="p-6 pb-10 onboarding-wrapper">
           <div className="flex gap-3 lg:justify-end">
             {step > 1 && (
-              <Button variant="secondary" onClick={() => setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
+              <Button variant="destructive" onClick={() => setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
                 <span className="flex items-center justify-center gap-2">
                   <ArrowLeft className="w-5 h-5" />
                   Back

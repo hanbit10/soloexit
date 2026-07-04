@@ -111,6 +111,7 @@ const ActivityLog = () => {
             <Card>
               <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
               <div className="flex flex-wrap gap-2">
+                {/* All Activities */}
                 {quickActivities.map((activity) => (
                   <Button
                     onClick={() => handleQuickAdd(activity)}
@@ -230,12 +231,9 @@ const ActivityLog = () => {
                       <p className="font-semibold text-slate-700 dark:text-slate-200">{activity.duration} min</p>
                       <p className="text-xs text-slate-400">{activity.calories} kcal</p>
                     </div>
-                    <button
-                      onClick={() => handleDelete(activity.documentId)}
-                      className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    >
+                    <Button onClick={() => handleDelete(activity.documentId)} variant="destructive" className="p-2 rounded-lg">
                       <Trash2Icon className="w-4 h-4" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}

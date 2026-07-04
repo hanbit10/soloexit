@@ -156,7 +156,7 @@ const FoodLog = () => {
                   <Button
                     onClick={() => handleQuickAdd(activity.name)}
                     variant="outline"
-                    className="px-4 py-2rounded-xl text-sm font-medium  transition-colors"
+                    className="px-4 py-2rounded-xl text-sm font-medium"
                     key={activity.name}
                   >
                     {activity.emoji} {activity.name}
@@ -284,12 +284,9 @@ const FoodLog = () => {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{entry.calories} kcal</span>
-                          <button
-                            onClick={() => handleDelete(entry?.documentId || "")}
-                            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                          >
+                          <Button onClick={() => handleDelete(entry?.documentId || "")} className="p-2 rounded-lg">
                             <Trash2Icon className="w-4 h-4" />
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     ))}
