@@ -3,9 +3,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FormData } from "../types";
-import Card from "../components/ui/Card";
 import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
 import Input from "../components/Input";
 import Select from "../components/Select";

@@ -2,17 +2,9 @@ import { useEffect, useState } from "react";
 import { getMotivationalMessage } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry, FoodEntry } from "../types";
-import Card from "../components/ui/Card";
+import { Card } from "../components/ui/card";
 import ProgressBar from "../components/ProgressBar";
-import {
-  Activity,
-  FlameIcon,
-  HamburgerIcon,
-  Ruler,
-  ScaleIcon,
-  TrendingUpIcon,
-  ZapIcon,
-} from "lucide-react";
+import { Activity, FlameIcon, HamburgerIcon, Ruler, ScaleIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
 import CaloriesChart from "../components/CaloriesChart";
 
 const Dashboard = () => {
@@ -25,13 +17,9 @@ const Dashboard = () => {
   // Load user data
   const loadUserData = () => {
     const today = new Date().toISOString().split("T")[0];
-    const foodData = allFoodLogs.filter(
-      (f: FoodEntry) => f.createdAt?.split("T")[0] === today,
-    );
+    const foodData = allFoodLogs.filter((f: FoodEntry) => f.createdAt?.split("T")[0] === today);
     setTodayFood(foodData);
-    const activityData = allActivityLogs.filter(
-      (f: ActivityEntry) => f.createdAt?.split("T")[0] === today,
-    );
+    const activityData = allActivityLogs.filter((f: ActivityEntry) => f.createdAt?.split("T")[0] === today);
     setTodayActivities(activityData);
   };
 
@@ -41,28 +29,15 @@ const Dashboard = () => {
     })();
   }, [allActivityLogs, allFoodLogs]);
 
-  const totalCalories: number = todayFood.reduce(
-    (sum, item) => sum + item.calories,
-    0,
-  );
+  const totalCalories: number = todayFood.reduce((sum, item) => sum + item.calories, 0);
 
   const remainingCalories: number = DAILY_CALORIE_LIMIT - totalCalories;
 
-  const totalActiveMinutes: number = todayActivities.reduce(
-    (sum, item) => sum + item.duration,
-    0,
-  );
+  const totalActiveMinutes: number = todayActivities.reduce((sum, item) => sum + item.duration, 0);
 
-  const totalBurned: number = todayActivities.reduce(
-    (sum, item) => sum + (item.calories || 0),
-    0,
-  );
+  const totalBurned: number = todayActivities.reduce((sum, item) => sum + (item.calories || 0), 0);
 
-  const motivation = getMotivationalMessage(
-    totalCalories,
-    totalActiveMinutes,
-    DAILY_CALORIE_LIMIT,
-  );
+  const motivation = getMotivationalMessage(totalCalories, totalActiveMinutes, DAILY_CALORIE_LIMIT);
 
   return (
     <div className="page-container">
@@ -91,20 +66,12 @@ const Dashboard = () => {
               </div>
             </div>
             <div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Calories Consumed
-              </p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">
-                {totalCalories}
-              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Calories Consumed</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalCalories}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Limit
-              </p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">
-                {DAILY_CALORIE_LIMIT}
-              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Limit</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{DAILY_CALORIE_LIMIT}</p>
             </div>
           </div>
           <ProgressBar value={totalCalories} max={DAILY_CALORIE_LIMIT} />
@@ -114,14 +81,10 @@ const Dashboard = () => {
               className={`px-3 py-1.5 rounded-lg ${remainingCalories >= 0 ? "bg-slate-200 dark:bg-slate-900/10 text-slate-700 dark:text-slate-200" : "bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400"}`}
             >
               <span className="text-sm font-medium">
-                {remainingCalories >= 0
-                  ? `${remainingCalories}kcal remaining`
-                  : `${Math.abs(remainingCalories)} kcal over`}
+                {remainingCalories >= 0 ? `${remainingCalories}kcal remaining` : `${Math.abs(remainingCalories)} kcal over`}
               </span>
             </div>
-            <span className="text-sm text-slate-400">
-              {Math.round((totalCalories / DAILY_CALORIE_LIMIT) * 100)}%
-            </span>
+            <span className="text-sm text-slate-400">{Math.round((totalCalories / DAILY_CALORIE_LIMIT) * 100)}%</span>
           </div>
 
           <div className="border-t border-slate-100 dark:border-slate-800 my-4"></div>
@@ -133,24 +96,15 @@ const Dashboard = () => {
               </div>
             </div>
             <div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Calories Burned
-              </p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">
-                {totalBurned}
-              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Calories Burned</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalBurned}</p>
             </div>
             <div className="text-right">
               <p className="text-sm text-slate-500 dark:text-slate-400">Goal</p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">
-                {user?.dailyCalorieBurn || 400}
-              </p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-white">{user?.dailyCalorieBurn || 400}</p>
             </div>
           </div>
-          <ProgressBar
-            value={totalBurned}
-            max={user?.dailyCalorieBurn || 400}
-          />
+          <ProgressBar value={totalBurned} max={user?.dailyCalorieBurn || 400} />
         </Card>
 
         {/* Stats Row */}
@@ -164,9 +118,7 @@ const Dashboard = () => {
               </div>
               <p className="text-sm text-slate-500">Active</p>
             </div>
-            <p className="text-2xl font-bold text-salte-800 dark:text-white">
-              {totalActiveMinutes}
-            </p>
+            <p className="text-2xl font-bold text-salte-800 dark:text-white">{totalActiveMinutes}</p>
             <p className="text-sm text-slate-400">minutes today</p>
           </Card>
 
@@ -178,9 +130,7 @@ const Dashboard = () => {
               </div>
               <p className="text-sm text-slate-500">Workouts</p>
             </div>
-            <p className="text-2xl font-bold text-salte-800 dark:text-white">
-              {todayActivities.length}
-            </p>
+            <p className="text-2xl font-bold text-salte-800 dark:text-white">{todayActivities.length}</p>
             <p className="text-sm text-slate-400">activities logged</p>
           </Card>
         </div>
@@ -212,9 +162,7 @@ const Dashboard = () => {
                 <ScaleIcon className="w-6 h-6 text-indigo-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-800 dark:text-white">
-                  Body Metrics
-                </h3>
+                <h3 className="font-semibold text-slate-800 dark:text-white">Body Metrics</h3>
                 <p className="text-slate-500 text-sm">Your stats</p>
               </div>
             </div>
@@ -225,13 +173,9 @@ const Dashboard = () => {
                   <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
                     <ScaleIcon className="w-4 h-4 text-slate-500" />
                   </div>
-                  <span className="text-sm text-slate-500 dark:text-salte-400">
-                    Weight
-                  </span>
+                  <span className="text-sm text-slate-500 dark:text-salte-400">Weight</span>
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">
-                  {user.weight} kg
-                </span>
+                <span className="font-semibold text-slate-700 dark:text-slate-200">{user.weight} kg</span>
               </div>
 
               {user.height && (
@@ -240,26 +184,18 @@ const Dashboard = () => {
                     <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
                       <Ruler className="w-4 h-4 text-slate-500" />
                     </div>
-                    <span className="text-sm text-slate-500 dark:text-salte-400">
-                      Height
-                    </span>
+                    <span className="text-sm text-slate-500 dark:text-salte-400">Height</span>
                   </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">
-                    {user.height} cm
-                  </span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-200">{user.height} cm</span>
                 </div>
               )}
 
               {user.height && (
                 <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="flex justify-between items-center mb-2 ">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                      BMI
-                    </span>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">BMI</span>
                     {(() => {
-                      const bmi = (
-                        user.weight / Math.pow(user.height / 100, 2)
-                      ).toFixed(1);
+                      const bmi = (user.weight / Math.pow(user.height / 100, 2)).toFixed(1);
 
                       const getStatus = (b: number) => {
                         if (b < 18.5) return { color: "text-blue-500" };
@@ -271,11 +207,7 @@ const Dashboard = () => {
                         return { color: "text-red-500" };
                       };
                       const status = getStatus(Number(bmi));
-                      return (
-                        <span className={`text-lg font-bold ${status.color}`}>
-                          {bmi}
-                        </span>
-                      );
+                      return <span className={`text-lg font-bold ${status.color}`}>{bmi}</span>;
                     })()}
                   </div>
                   {/* bmi scale visual */}
@@ -298,45 +230,29 @@ const Dashboard = () => {
 
         {/* Quick Summary */}
         <Card>
-          <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
-            Today's Summary
-          </h3>
+          <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Today's Summary</h3>
 
           <div className="space-y-3">
             <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-slate-500 dark:text-slate-400">
-                Meals logged
-              </span>
-              <span className="font-medium text-slate-700 dark:text-slate-200">
-                {todayFood.length}
-              </span>
+              <span className="text-slate-500 dark:text-slate-400">Meals logged</span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">{todayFood.length}</span>
             </div>
 
             <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-slate-500 dark:text-slate-400">
-                Total calories
-              </span>
-              <span className="font-medium text-slate-700 dark:text-slate-200">
-                {totalCalories} kcal
-              </span>
+              <span className="text-slate-500 dark:text-slate-400">Total calories</span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">{totalCalories} kcal</span>
             </div>
 
             <div className="flex justify-between items-center py-2 ">
-              <span className="text-slate-500 dark:text-slate-400">
-                Active time
-              </span>
-              <span className="font-medium text-slate-700 dark:text-slate-200">
-                {totalActiveMinutes} min
-              </span>
+              <span className="text-slate-500 dark:text-slate-400">Active time</span>
+              <span className="font-medium text-slate-700 dark:text-slate-200">{totalActiveMinutes} min</span>
             </div>
           </div>
         </Card>
 
         {/* aCTIVITY INTAKE GRAPH */}
         <Card className="col-span-2">
-          <h3 className="font-semibold text-slate-800 dark:text-white mb-2">
-            This Week's Progress
-          </h3>
+          <h3 className="font-semibold text-slate-800 dark:text-white mb-2">This Week's Progress</h3>
           <CaloriesChart />
         </Card>
       </div>

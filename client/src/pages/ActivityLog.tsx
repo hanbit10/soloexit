@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry } from "../types";
-import Card from "../components/ui/Card";
+import { Card } from "../components/ui/card";
 import { quickActivities } from "../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 import Input from "../components/Input";

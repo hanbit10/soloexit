@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { ProfileFormData } from "../types";
-import Card from "../components/ui/Card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { goalLabels, goalOptions } from "../assets/assets";
@@ -82,18 +82,18 @@ const Profile = () => {
       <div className="profile-content">
         {/* left col */}
         <Card>
-          {/* card title */}
-          <div className="flex items-center gap-4 mb-6">
+          <CardHeader className="flex items-center gap-4">
             <div className="size-12 rounded-xl bg-linear-to-br from-slate-400 to-slate-600 flex items-center justify-center">
               <User className="size-6 text-white" />
             </div>
-            <div>
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Your Profile</h2>
+            <CardTitle>
+              <h2 className="text-lg font-semibold">Your Profile</h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs">Member since {new Date(user?.createdAt || "").toLocaleDateString()}</p>
-            </div>
-          </div>
+            </CardTitle>
+          </CardHeader>
+
           {isEditing ? (
-            <div className="space-y-4">
+            <CardContent className="space-y-4">
               <Input label="Age" type="number" value={formData.age} onChange={(v) => setFormData({ ...formData, age: Number(v) })} min={13} max={120} />
 
               <Input
@@ -148,10 +148,10 @@ const Profile = () => {
                   Save Changes
                 </Button>
               </div>
-            </div>
+            </CardContent>
           ) : (
             <>
-              <div className="space-y-4">
+              <CardContent className="space-y-4">
                 {/* age */}
                 <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
                   <div className="size-10 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
@@ -198,10 +198,12 @@ const Profile = () => {
                     <p className="font-semibold text-slate-800 dark:text-white">{goalLabels[user?.goal || "gain"]}</p>
                   </div>
                 </div>
-              </div>
-              <Button onClick={() => setIsEditing(true)} className="w-full mt-4">
-                Edit Profile
-              </Button>
+              </CardContent>
+              <CardFooter>
+                <Button onClick={() => setIsEditing(true)} className="w-full ">
+                  Edit Profile
+                </Button>
+              </CardFooter>
             </>
           )}
         </Card>
@@ -209,17 +211,23 @@ const Profile = () => {
         <div className="space-y-4">
           {/* stats card */}
           <Card>
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Your Stats</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
+            <CardHeader>
+              <CardTitle>Your Stats</CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
+                </div>
+
+                <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
+                </div>
               </div>
-              <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
-              </div>
-            </div>
+            </CardContent>
           </Card>
 
           {/* toggle theme button for phone */}
