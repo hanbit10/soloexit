@@ -3,7 +3,7 @@ import { getMotivationalMessage } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry, FoodEntry } from "../types";
 import { Card, CardContent, CardHeader } from "../components/ui/card";
-import ProgressBar from "../components/ProgressBar";
+import { Progress } from "../components/ui/progress";
 import { Activity, FlameIcon, HamburgerIcon, Ruler, ScaleIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
 import CaloriesChart from "../components/CaloriesChart";
 
@@ -75,7 +75,7 @@ const Dashboard = () => {
                 <p className="text-2xl font-bold text-slate-800 dark:text-white">{DAILY_CALORIE_LIMIT}</p>
               </div>
             </div>
-            <ProgressBar value={totalCalories} max={DAILY_CALORIE_LIMIT} />
+            <Progress value={totalCalories} max={DAILY_CALORIE_LIMIT} />
 
             <div className="mt-4 flex justify-between items-center">
               <div
@@ -105,7 +105,7 @@ const Dashboard = () => {
                 <p className="text-2xl font-bold text-slate-800 dark:text-white">{user?.dailyCalorieBurn || 400}</p>
               </div>
             </div>
-            <ProgressBar value={totalBurned} max={user?.dailyCalorieBurn || 400} />
+            <Progress value={totalBurned} max={user?.dailyCalorieBurn || 400} />
           </CardContent>
         </Card>
 

@@ -2,23 +2,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import type { FoodEntry, FormData } from "../types";
+import type { FoodEntry, FoodFormData } from "../types";
 import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader } from "../components/ui/card";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
-import Input from "../components/Input";
-import Select from "../components/Select";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
 import api from "../configs/api";
+
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
 
   const [entries, setEntries] = useState<FoodEntry[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FoodFormData>({
     name: "",
     calories: 0,
     mealType: "",
@@ -201,49 +203,75 @@ const FoodLog = () => {
             </CardHeader>
             <CardContent>
               <form className="space-y-4" action="" onSubmit={handleSubmit}>
-                <Input
-                  label="Food Name"
-                  value={formData.name}
-                  onChange={(v) => setFormData({ ...formData, name: v.toString() })}
-                  placeholder="e.g., Grilled Chicken Salad"
-                  required
-                />
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="food-name">Food Name</FieldLabel>
+                    <Input
+                      id="food-name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g., Grilled Chicken Salad"
+                      required
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="calories">Calories</FieldLabel>
+                    <Input
+                      id="calories"
+                      type="number"
+                      value={formData.calories}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          calories: Number(e.target.value),
+                        })
+                      }
+                      placeholder="e.g., 350"
+                      required
+                      min={1}
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="meal-type">Meal Type</FieldLabel>
+                    <Select
+                      value={formData.mealType}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          mealType: value ?? "",
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select meal type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mealTypeOptions.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
 
-                <Input
-                  label="Calories"
-                  type="number"
-                  value={formData.calories}
-                  onChange={(v) => setFormData({ ...formData, calories: Number(v) })}
-                  placeholder="e.g., 350"
-                  required
-                  min={1}
-                />
-
-                <Select
-                  label="Meal Type"
-                  value={formData.mealType}
-                  onChange={(v) => setFormData({ ...formData, mealType: v.toString() })}
-                  options={mealTypeOptions}
-                  placeholder="Select meal type"
-                  required
-                />
-
-                <div className="flex gap-3 pt-2">
-                  <Button
-                    className="flex-1"
-                    type="button"
-                    variant="destructive"
-                    onClick={() => {
-                      setShowForm(false);
-                      setFormData({ name: "", calories: 0, mealType: "" });
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="flex-1">
-                    Add Entry
-                  </Button>
-                </div>
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      className="flex-1"
+                      type="button"
+                      variant="destructive"
+                      onClick={() => {
+                        setShowForm(false);
+                        setFormData({ name: "", calories: 0, mealType: "" });
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="flex-1">
+                      Add Entry
+                    </Button>
+                  </div>
+                </FieldGroup>
               </form>
             </CardContent>
           </Card>
