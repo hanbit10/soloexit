@@ -3,7 +3,7 @@ import { useTheme } from "../context/ThemeContext";
 import { NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
 // import { Sidebar } from "./ui/sidebar";
-// import { Sidebar } from "@/components/ui/sidebar";
+// import { Sidebar } from "@/components/ui/sidebar.tsx";
 
 const SideNavbar = () => {
   const navItems = [
