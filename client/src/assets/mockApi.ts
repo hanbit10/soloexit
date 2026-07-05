@@ -1,9 +1,10 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { dummyUser, dummyFoodLogs, dummyActivityLogs } from "../assets/assets";
-import type { UserData, FoodEntry, ActivityEntry, FormData } from "../types";
+// import { dummyUser, dummyFoodLogs, dummyActivityLogs } from "../assets/assets";
+// import type { UserData, FoodEntry, ActivityEntry, FormData } from "../types";
 
+/*
 interface DB {
   user: any;
   foodLogs: FoodEntry[];
@@ -176,3 +177,4 @@ const mockApi = {
 };
 
 export default mockApi;
+*/
