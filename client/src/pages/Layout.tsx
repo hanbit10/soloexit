@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/ui/Sidebar";
-import BottomNav from "../components/ui/BottomNav";
+import SideNavbar from "../components/SideNavbar";
+import BottomNav from "../components/ui/mobileNav";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Layout = () => {
   return (
-    <div className="layout-container">
-      <Sidebar />
+    <SidebarProvider>
+      <SideNavbar />
       <div className="flex-1 overflow-y-scroll">
         <Outlet />
       </div>
       <BottomNav />
-    </div>
+    </SidebarProvider>
   );
 };
 

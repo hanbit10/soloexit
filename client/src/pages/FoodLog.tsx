@@ -2,23 +2,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import type { FoodEntry, FormData } from "../types";
-import Card from "../components/ui/Card";
+import type { FoodEntry, FoodFormData } from "../types";
 import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader } from "../components/ui/card";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
-import Input from "../components/Input";
-import Select from "../components/Select";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
 import api from "../configs/api";
+
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
 
   const [entries, setEntries] = useState<FoodEntry[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FoodFormData>({
     name: "",
     calories: 0,
     mealType: "",
@@ -150,19 +152,23 @@ const FoodLog = () => {
         {!showForm && (
           <div className="space-y-4">
             <Card>
-              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-3">Quick Add</h3>
-              <div className="flex flex-wrap gap-2 ">
-                {quickActivitiesFoodLog.map((activity) => (
-                  <Button
-                    onClick={() => handleQuickAdd(activity.name)}
-                    variant="outline"
-                    className="px-4 py-2rounded-xl text-sm font-medium  transition-colors"
-                    key={activity.name}
-                  >
-                    {activity.emoji} {activity.name}
-                  </Button>
-                ))}
-              </div>
+              <CardHeader>
+                <h3 className="font-semibold">Quick Add</h3>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {quickActivitiesFoodLog.map((activity) => (
+                    <Button
+                      onClick={() => handleQuickAdd(activity.name)}
+                      variant="outline"
+                      className="px-4 py-2rounded-xl text-sm font-medium"
+                      key={activity.name}
+                    >
+                      {activity.emoji} {activity.name}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
             </Card>
 
             <Button className="w-full" onClick={() => setShowForm(true)}>
@@ -191,65 +197,96 @@ const FoodLog = () => {
 
         {/* Add Form */}
         {showForm && (
-          <Card className="border-2 border-slate-600 dark:border-slate-200">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">New Food Entry</h3>
+          <Card className="mb-0">
+            <CardHeader>
+              <h3 className="font-semibold text-slate-800 dark:text-white mb-4">New Food Entry</h3>
+            </CardHeader>
+            <CardContent>
+              <form className="space-y-4" action="" onSubmit={handleSubmit}>
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel htmlFor="food-name">Food Name</FieldLabel>
+                    <Input
+                      id="food-name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g., Grilled Chicken Salad"
+                      required
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="calories">Calories</FieldLabel>
+                    <Input
+                      id="calories"
+                      type="number"
+                      value={formData.calories}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          calories: Number(e.target.value),
+                        })
+                      }
+                      placeholder="e.g., 350"
+                      required
+                      min={1}
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="meal-type">Meal Type</FieldLabel>
+                    <Select
+                      value={formData.mealType}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          mealType: value ?? "",
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select meal type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mealTypeOptions.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
 
-            <form className="space-y-4" action="" onSubmit={handleSubmit}>
-              <Input
-                label="Food Name"
-                value={formData.name}
-                onChange={(v) => setFormData({ ...formData, name: v.toString() })}
-                placeholder="e.g., Grilled Chicken Salad"
-                required
-              />
-
-              <Input
-                label="Calories"
-                type="number"
-                value={formData.calories}
-                onChange={(v) => setFormData({ ...formData, calories: Number(v) })}
-                placeholder="e.g., 350"
-                required
-                min={1}
-              />
-
-              <Select
-                label="Meal Type"
-                value={formData.mealType}
-                onChange={(v) => setFormData({ ...formData, mealType: v.toString() })}
-                options={mealTypeOptions}
-                placeholder="Select meal type"
-                required
-              />
-
-              <div className="flex gap-3 pt-2">
-                <Button
-                  className="flex-1"
-                  type="button"
-                  variant="destructive"
-                  onClick={() => {
-                    setShowForm(false);
-                    setFormData({ name: "", calories: 0, mealType: "" });
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" className="flex-1">
-                  Add Entry
-                </Button>
-              </div>
-            </form>
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      className="flex-1"
+                      type="button"
+                      variant="destructive"
+                      onClick={() => {
+                        setShowForm(false);
+                        setFormData({ name: "", calories: 0, mealType: "" });
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="flex-1">
+                      Add Entry
+                    </Button>
+                  </div>
+                </FieldGroup>
+              </form>
+            </CardContent>
           </Card>
         )}
 
         {/* Entries List */}
         {entries.length === 0 ? (
           <Card className="text-center py-12">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
-              <UtensilsCrossedIcon className="size-8 text-slate-400 dark:text-slate-500" />
-            </div>
-            <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">No food logged today</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Start tracking your meals to stay on target</p>
+            <CardContent>
+              <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                <UtensilsCrossedIcon className="size-8 text-slate-400 dark:text-slate-500" />
+              </div>
+              <h3 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">No food logged today</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">Start tracking your meals to stay on target</p>
+            </CardContent>
           </Card>
         ) : (
           <div className="space-y-4">
@@ -263,37 +300,38 @@ const FoodLog = () => {
 
               return (
                 <Card key={mealType}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${mealColors[mealTypeKey]}`}>
-                        <MealIcon className="size-5" />
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${mealColors[mealTypeKey]}`}>
+                          <MealIcon className="size-5" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-800 dark:text-white capitalize">{mealType}</h3>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">{groupedEntries[mealTypeKey].length} items</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-slate-800 dark:text-white capitalize">{mealType}</h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">{groupedEntries[mealTypeKey].length} items</p>
-                      </div>
+                      <p className="font-semibold text-slate-700 dark:text-slate-200">{mealCalories} kcal</p>
                     </div>
-                    <p className="font-semibold text-slate-700 dark:text-slate-200">{mealCalories} kcal</p>
-                  </div>
-                  <div className="space-y-2">
-                    {groupedEntries[mealTypeKey].map((entry) => (
-                      <div key={entry.id} className="food-entry-item">
-                        <div className="flex-1">
-                          <p className="font-medium text-slate-700 dark:text-slate-200">{entry.name}</p>
-                          <p className="text-sm text-slate-400">{}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {groupedEntries[mealTypeKey].map((entry) => (
+                        <div key={entry.id} className="food-entry-item">
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-700 dark:text-slate-200">{entry.name}</p>
+                            <p className="text-sm text-slate-400">{}</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{entry.calories} kcal</span>
+                            <Button variant="destructive" onClick={() => handleDelete(entry?.documentId || "")} className="p-2 rounded-lg">
+                              <Trash2Icon className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{entry.calories} kcal</span>
-                          <button
-                            onClick={() => handleDelete(entry?.documentId || "")}
-                            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                          >
-                            <Trash2Icon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </CardContent>
                 </Card>
               );
             })}

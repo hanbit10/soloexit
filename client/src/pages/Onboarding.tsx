@@ -3,13 +3,16 @@ import toast, { Toaster } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 import type { ProfileFormData } from "../types";
 import { useState } from "react";
-import Input from "../components/Input";
-import Button from "../components/Button";
 // import mockApi from "../assets/mockApi";
 import { ageRanges, goalOptions } from "../assets/assets";
-import Slider from "../components/Slider";
 import api from "../configs/api";
 import { AxiosError } from "axios";
+
+import { Slider } from "../components/ui/slider";
+import { Button } from "../components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "../components/ui/input";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -109,17 +112,22 @@ const Onboarding = () => {
                   <p className="text-slate-500 dark:text-slate-400 text-sm">This helps us calculate your needs</p>
                 </div>
               </div>
-              <Input
-                label="Age"
-                type="number"
-                className="max-w-2xl"
-                value={formData.age}
-                onChange={(v) => updateField("age", v)}
-                placeholder="Enter your age"
-                min={13}
-                max={120}
-                required
-              />
+              <Field>
+                <FieldLabel htmlFor="age">
+                  Age<span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  id="age"
+                  type="number"
+                  className="max-w-2xl"
+                  value={formData.age}
+                  onChange={(e) => updateField("age", e.target.value)}
+                  placeholder="Enter your age"
+                  min={13}
+                  max={120}
+                  required
+                />
+              </Field>
             </div>
           )}
 
@@ -135,27 +143,35 @@ const Onboarding = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-4 max-w-2xl">
-                <Input
-                  label="Weight (kg)"
-                  type="number"
-                  value={formData.weight}
-                  onChange={(v) => updateField("weight", v)}
-                  placeholder="Enter your weight"
-                  min={20}
-                  max={300}
-                  required
-                />
-
-                <Input
-                  label="Height (cm)"
-                  type="number"
-                  value={formData.height}
-                  onChange={(v) => updateField("height", v)}
-                  placeholder="Enter your height"
-                  min={100}
-                  max={250}
-                  required
-                />
+                <FieldGroup>
+                  <FieldLabel htmlFor="weight">
+                    Weight (kg)<span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <FieldDescription>We'll use this to calculate your BMI and track your progress</FieldDescription>
+                  <Input
+                    id="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={(e) => updateField("weight", e.target.value)}
+                    placeholder="Enter your weight"
+                    min={20}
+                    max={300}
+                    required
+                  />
+                  <FieldLabel htmlFor="height">
+                    Height (cm)<span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={formData.height}
+                    onChange={(e) => updateField("height", e.target.value)}
+                    placeholder="Enter your height"
+                    min={100}
+                    max={250}
+                    required
+                  />
+                </FieldGroup>
               </div>
             </div>
           )}
@@ -175,7 +191,7 @@ const Onboarding = () => {
               {/* options */}
               <div className="space-y-4 max-w-lg">
                 {goalOptions.map((option) => (
-                  <button
+                  <Button
                     key={option.value}
                     onClick={() => {
                       const age = Number(formData.age);
@@ -199,10 +215,10 @@ const Onboarding = () => {
                         dailyCalorieBurn: burn,
                       });
                     }}
-                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2 ring-slate-200"}`}
+                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2"}`}
                   >
                     <span className="text-base text-slate-700 dark:text-slate-200">{option.label}</span>
-                  </button>
+                  </Button>
                 ))}
               </div>
 
@@ -212,26 +228,35 @@ const Onboarding = () => {
               <div className="space-y-8 max-w-lg">
                 <h3 className="text-md font-medium text-slate-800 dark:text-white mb-4">Daily Targets</h3>
                 <div className="space-y-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Label htmlFor="dailyCalorieIntake">Daily Calorie Intake</Label>
+                    <span className="text-sm text-muted-foreground">{formData.dailyCalorieIntake} kcal</span>
+                  </div>
                   <Slider
-                    label="Daily Calorie Intake"
+                    id="dailyCalorieIntake"
                     min={120}
                     max={4000}
                     step={50}
-                    value={formData.dailyCalorieIntake}
-                    onChange={(v) => updateField("dailyCalorieIntake", v)}
-                    unit="kcal"
-                    infoText="The total calories you plan to consume each day"
+                    value={[formData.dailyCalorieIntake]}
+                    onValueChange={(value) => {
+                      const newValue = Array.isArray(value) ? value[0] : value;
+                      updateField("dailyCalorieIntake", newValue);
+                    }}
                   />
-
+                  <div className="flex items-center justify-between mb-4">
+                    <Label htmlFor="dailyCalorieIntake">Daily Calorie Burn</Label>
+                    <span className="text-sm text-muted-foreground">{formData.dailyCalorieBurn} kcal</span>
+                  </div>
                   <Slider
-                    label="Daily Calorie Burn"
+                    id="dailyCalorieBurn"
                     min={100}
                     max={2000}
                     step={50}
                     value={formData.dailyCalorieBurn}
-                    onChange={(v) => updateField("dailyCalorieBurn", v)}
-                    unit="kcal"
-                    infoText="The total calories you aim to burn through exercise and activity each day."
+                    onValueChange={(value) => {
+                      const newValue = Array.isArray(value) ? value[0] : value;
+                      updateField("dailyCalorieBurn", newValue);
+                    }}
                   />
                 </div>
               </div>
@@ -242,7 +267,7 @@ const Onboarding = () => {
         <div className="p-6 pb-10 onboarding-wrapper">
           <div className="flex gap-3 lg:justify-end">
             {step > 1 && (
-              <Button variant="secondary" onClick={() => setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
+              <Button variant="destructive" onClick={() => setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
                 <span className="flex items-center justify-center gap-2">
                   <ArrowLeft className="w-5 h-5" />
                   Back

@@ -1,3 +1,6 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { dummyUser, dummyFoodLogs, dummyActivityLogs } from "../assets/assets";
 import type { UserData, FoodEntry, ActivityEntry, FormData } from "../types";
 
@@ -129,9 +132,7 @@ const mockApi = {
       const db = getDB();
       return { data: db.activityLogs };
     },
-    create: async (payload: {
-      data: { name: string; duration: number; calories: number };
-    }) => {
+    create: async (payload: { data: { name: string; duration: number; calories: number } }) => {
       await delay(300);
       const db = getDB();
       const newEntry: ActivityEntry = {
@@ -150,9 +151,7 @@ const mockApi = {
     delete: async (documentId: string) => {
       await delay(300);
       const db = getDB();
-      db.activityLogs = db.activityLogs.filter(
-        (a) => a.documentId !== documentId,
-      );
+      db.activityLogs = db.activityLogs.filter((a) => a.documentId !== documentId);
       saveDB(db);
       return { data: { id: documentId } };
     },

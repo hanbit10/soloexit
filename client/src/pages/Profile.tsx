@@ -3,15 +3,17 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { ProfileFormData } from "../types";
-import Card from "../components/ui/Card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { goalLabels, goalOptions } from "../assets/assets";
-import Input from "../components/Input";
-import Select from "../components/Select";
+import { goalLabels } from "../assets/assets";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
 import api from "../configs/api";
+
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Profile = () => {
   const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();
@@ -82,76 +84,106 @@ const Profile = () => {
       <div className="profile-content">
         {/* left col */}
         <Card>
-          {/* card title */}
-          <div className="flex items-center gap-4 mb-6">
+          <CardHeader className="flex items-center gap-4">
             <div className="size-12 rounded-xl bg-linear-to-br from-slate-400 to-slate-600 flex items-center justify-center">
               <User className="size-6 text-white" />
             </div>
-            <div>
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Your Profile</h2>
+            <CardTitle>
+              <h2 className="text-lg font-semibold">Your Profile</h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs">Member since {new Date(user?.createdAt || "").toLocaleDateString()}</p>
-            </div>
-          </div>
+            </CardTitle>
+          </CardHeader>
+
           {isEditing ? (
-            <div className="space-y-4">
-              <Input label="Age" type="number" value={formData.age} onChange={(v) => setFormData({ ...formData, age: Number(v) })} min={13} max={120} />
+            <CardContent className="space-y-4">
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="age">Age</FieldLabel>
+                  <Input
+                    id="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                    min={13}
+                    max={120}
+                  />
+                </Field>
 
-              <Input
-                label="Weight (kg) "
-                type="number"
-                value={formData.weight}
-                onChange={(v) => setFormData({ ...formData, weight: Number(v) })}
-                min={20}
-                max={300}
-              />
+                <Field>
+                  <FieldLabel htmlFor="weight">Weight</FieldLabel>
+                  <Input
+                    id="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) })}
+                    min={20}
+                    max={300}
+                  />
+                </Field>
 
-              <Input
-                label="Height (cm) "
-                type="number"
-                value={formData.height}
-                onChange={(v) => setFormData({ ...formData, height: Number(v) })}
-                min={100}
-                max={250}
-              />
+                <Field>
+                  <FieldLabel htmlFor="height">Height</FieldLabel>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={formData.height}
+                    onChange={(e) => setFormData({ ...formData, height: Number(e.target.value) })}
+                    min={100}
+                    max={250}
+                  />
+                </Field>
 
-              <Select
-                label="Fitness Goal"
-                value={formData.goal as string}
-                onChange={(v) =>
-                  setFormData({
-                    ...formData,
-                    goal: v as "lose" | "maintain" | "gain",
-                  })
-                }
-                options={goalOptions}
-              />
+                <Field>
+                  <FieldLabel htmlFor="goal">Fitness Goal</FieldLabel>
+                  <Select
+                    id="goal"
+                    value={formData.goal}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        goal: value as "lose" | "maintain" | "gain",
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a goal" />
+                    </SelectTrigger>
 
-              <div className="flex gap-3 pt-2">
-                <Button
-                  variant="secondary"
-                  className="flex-1"
-                  onClick={() => {
-                    setIsEditing(false);
-                    setFormData({
-                      age: Number(user.age),
-                      weight: Number(user.weight),
-                      height: Number(user.height),
-                      goal: user.goal || "",
-                      dailyCalorieIntake: user.dailyCalorieIntake || 2000,
-                      dailyCalorieBurn: user.dailyCalorieBurn || 400,
-                    });
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button className="flex-1" onClick={handleSave}>
-                  Save Changes
-                </Button>
-              </div>
-            </div>
+                    <SelectContent>
+                      <SelectItem value="lose">Lose weight</SelectItem>
+                      <SelectItem value="maintain">Maintain</SelectItem>
+                      <SelectItem value="gain">Gain weight</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    onClick={() => {
+                      setIsEditing(false);
+                      setFormData({
+                        age: Number(user.age),
+                        weight: Number(user.weight),
+                        height: Number(user.height),
+                        goal: user.goal || "",
+                        dailyCalorieIntake: user.dailyCalorieIntake || 2000,
+                        dailyCalorieBurn: user.dailyCalorieBurn || 400,
+                      });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="flex-1" onClick={handleSave}>
+                    Save Changes
+                  </Button>
+                </div>
+              </FieldGroup>
+            </CardContent>
           ) : (
             <>
-              <div className="space-y-4">
+              <CardContent className="space-y-4">
                 {/* age */}
                 <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
                   <div className="size-10 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
@@ -198,10 +230,12 @@ const Profile = () => {
                     <p className="font-semibold text-slate-800 dark:text-white">{goalLabels[user?.goal || "gain"]}</p>
                   </div>
                 </div>
-              </div>
-              <Button variant="secondary" onClick={() => setIsEditing(true)} className="w-full mt-4">
-                Edit Profile
-              </Button>
+              </CardContent>
+              <CardFooter>
+                <Button onClick={() => setIsEditing(true)} className="w-full ">
+                  Edit Profile
+                </Button>
+              </CardFooter>
             </>
           )}
         </Card>
@@ -209,32 +243,35 @@ const Profile = () => {
         <div className="space-y-4">
           {/* stats card */}
           <Card>
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Your Stats</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
+            <CardHeader>
+              <CardTitle>Your Stats</CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
+                </div>
+
+                <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
+                </div>
               </div>
-              <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
-              </div>
-            </div>
+            </CardContent>
           </Card>
 
           {/* toggle theme button for phone */}
           <div className="lg:hidden">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"
-            >
+            <Button onClick={toggleTheme} variant="ghost" className="flex items-center gap-3 px-4 py-2.5 w-full rounded-lg cursor-pointer">
               {theme === "light" ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
               <span className="text-base">{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-            </button>
+            </Button>
           </div>
 
           {/* Logout button */}
-          <Button variant="destructive" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
+          <Button variant="destructive" onClick={logout} className="w-full">
             <LogOutIcon className="size-4" />
             Logout
           </Button>
