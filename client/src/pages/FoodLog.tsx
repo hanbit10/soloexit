@@ -5,7 +5,7 @@ import { useAppContext } from "../context/AppContext";
 import type { FoodEntry, FoodFormData } from "../types";
 import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card.tsx";
+import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";

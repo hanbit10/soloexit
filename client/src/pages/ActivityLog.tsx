@@ -7,7 +7,7 @@ import { quickActivities } from "../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 // import Input from "../components/Input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/Card";
 import toast from "react-hot-toast";
 // import mockApi from "../assets/mockApi";
 import api from "../configs/api";

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { ProfileFormData } from "../types";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, Target, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { goalLabels } from "../assets/assets";
