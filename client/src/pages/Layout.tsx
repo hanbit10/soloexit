@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Outlet } from "react-router-dom";
 import SideNavbar from "../components/SideNavbar";
-import BottomNav from "../components/ui/mobileNav";
-import { SidebarProvider } from "../components/ui/sidebar";
+import BottomNav from "@/components/ui/mobileNav";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Layout = () => {
   return (

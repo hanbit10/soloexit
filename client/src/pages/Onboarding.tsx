@@ -8,10 +8,10 @@ import { ageRanges, goalOptions } from "../assets/assets";
 import api from "../configs/api";
 import { AxiosError } from "axios";
 
-import { Slider } from "../components/ui/slider";
-import { Button } from "../components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "../components/ui/input";
+import { Input } from "@/components/ui/input";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 const Onboarding = () => {

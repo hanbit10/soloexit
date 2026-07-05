@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import type { ActivityEntry } from "../types";
-import { Card, CardContent, CardFooter, CardHeader } from "../components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { quickActivities } from "../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 // import Input from "../components/Input";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 // import mockApi from "../assets/mockApi";
 import api from "../configs/api";
