@@ -1,6 +1,7 @@
-import { ActivityIcon, HomeIcon, MoonIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
+import { ActivityIcon, HomeIcon, MoonIcon, SettingsIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { NavLink } from "react-router-dom";
+import { Button } from "./ui/button";
 // import { Sidebar } from "./ui/sidebar";
 // import { Sidebar } from "../components/ui/sidebar";
 
@@ -10,6 +11,7 @@ const SideNavbar = () => {
     { path: "/food", label: "Food", icon: UtensilsIcon },
     { path: "/activity", label: "Activity", icon: ActivityIcon },
     { path: "/profile", label: "Profile", icon: UserIcon },
+    { path: "/settings", label: "Settings", icon: SettingsIcon },
   ];
 
   const { theme, toggleTheme } = useTheme();
@@ -36,14 +38,11 @@ const SideNavbar = () => {
           </NavLink>
         ))}
       </div>
-      <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
-        <button
-          onClick={toggleTheme}
-          className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"
-        >
+      <div className="mt-auto pt-6 border-t">
+        <Button onClick={toggleTheme} className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 cursor-pointer">
           {theme === "light" ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
           <span className="text-base">{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-        </button>
+        </Button>
       </div>
     </nav>
   );
