@@ -317,7 +317,7 @@ const FoodLog = () => {
                   <CardContent>
                     <div className="space-y-2">
                       {groupedEntries[mealTypeKey].map((entry) => (
-                        <div key={entry.id} className="food-entry-item">
+                        <div key={entry.id} className="food-entry-item bg-secondary">
                           <div className="flex-1">
                             <p className="font-medium text-slate-700 dark:text-slate-200">{entry.name}</p>
                             <p className="text-sm text-slate-400">{}</p>

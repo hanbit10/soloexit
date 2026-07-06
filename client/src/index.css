@@ -19,15 +19,11 @@
   font-family: "Rethink Sans", sans-serif;
 }
 
-body {
-  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100;
-}
-
 /* =========================
    SHARED LAYOUT
 ========================= */
 .page-container {
-  @apply min-h-screen bg-white dark:bg-slate-950 pb-24 transition-colors duration-200;
+  @apply min-h-screen pb-24;
 }
 
 .page-content-grid {
@@ -38,14 +34,14 @@ body {
    HEADER
 ========================= */
 .page-header {
-  @apply bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-6 pt-12 transition-colors duration-200;
+  @apply p-6 pt-12;
 }
 
 /* =========================
    LOGIN
 ========================= */
 .login-page-container {
-  @apply flex items-center justify-center w-full h-screen px-4 bg-white dark:bg-slate-950 transition-colors duration-200;
+  @apply flex items-center justify-center w-full h-screen px-4;
 }
 
 .login-form {
@@ -56,7 +52,7 @@ body {
    DASHBOARD
 ========================= */
 .dashboard-header {
-  @apply bg-linear-to-br from-slate-200 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-slate-900 dark:text-white p-6 pt-12 pb-20 rounded-b-3xl;
+  @apply bg-linear-to-br p-6 pt-12 pb-20 rounded-b-3xl;
 }
 
 .dashboard-grid {
@@ -78,7 +74,7 @@ body {
    FOOD LOG
 ========================= */
 .food-entry-item {
-  @apply flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl transition-colors duration-200;
+  @apply flex items-center justify-between p-3 rounded-xl;
 }
 
 /* =========================

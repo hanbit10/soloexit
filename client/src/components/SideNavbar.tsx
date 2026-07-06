@@ -17,7 +17,7 @@ const SideNavbar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="hidden lg:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 p-6 transition-colors duration-200">
+    <nav className="hidden lg:flex flex-col w-64 primary border-r p-6 transition-colors duration-200">
       <div className="flex items-center gap-3 mb-8">
         <div className="size-10 rounded-xl bg-zinc-800 dark:bg-zinc-900 flex items-center justify-center border border-zinc-700 shadow-sm">
           <SparklesIcon className="size-5 text-zinc-100" />
