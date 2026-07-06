@@ -215,9 +215,10 @@ const Onboarding = () => {
                         dailyCalorieBurn: burn,
                       });
                     }}
-                    className={`onboarding-option-btn ${formData.goal === option.value && "ring-2"}`}
+                    variant="outline"
+                    className={`option-btn  ${formData.goal === option.value && "ring-2"}`}
                   >
-                    <span className="text-base text-slate-700 dark:text-slate-200">{option.label}</span>
+                    <span className="text-base ">{option.label}</span>
                   </Button>
                 ))}
               </div>

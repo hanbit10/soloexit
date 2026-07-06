@@ -85,22 +85,22 @@ body {
    ACTIVITY LOG
 ========================= */
 .activity-entry-item {
-  @apply flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-xl transition-colors duration-200;
+  @apply flex items-center justify-between p-4 rounded-xl;
 }
 
 /* =========================
    ONBOARDING
 ========================= */
 .onboarding-container {
-  @apply min-h-screen bg-linear-to-b from-slate-100 to-white dark:from-slate-900 dark:to-slate-950 flex flex-col transition-colors duration-200;
+  @apply min-h-screen bg-linear-to-b flex flex-col;
 }
 
 .onboarding-wrapper {
   @apply w-full lg:max-w-5xl mx-auto;
 }
 
-.onboarding-option-btn {
-  @apply w-full p-3 pl-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200 cursor-pointer;
+.option-btn {
+  @apply w-full p-3 pl-5 border cursor-pointer;
 }
 
 @theme inline {

@@ -253,7 +253,7 @@ const ActivityLog = () => {
             <CardContent>
               <div className="space-y-2">
                 {activities.map((activity) => (
-                  <div key={activity.id} className="activity-entry-item">
+                  <div key={activity.id} className="activity-entry-item bg-secondary">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center ">
                         <TimerIcon className="size-5 text-blue-500 dark:text-blue-400" />
