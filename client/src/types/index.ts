@@ -114,9 +114,6 @@ export interface Product {
   name: string;
   category: ProductCategory;
 
-  am: boolean;
-  pm: boolean;
-
   // frequency system (important for retinol / acids)
   frequencyPerWeek?: number;
   activeDays?: number[];

@@ -1,7 +1,3 @@
-import { Card } from "@/components/ui/Card";
-import { Checkbox } from "@/components/ui/checkbox";
-import type { Product } from "@/types/index";
-
 export function RoutineToggle({ time, setTime }: { time: "AM" | "PM"; setTime: (t: "AM" | "PM") => void }) {
   return (
     <div className="flex gap-2">
@@ -24,41 +20,6 @@ export function RoutineProgress({ value }: { value: number }) {
       </div>
 
       <p className="text-sm text-muted-foreground mt-1">{value}% completed</p>
-    </div>
-  );
-}
-
-export function RoutineList({
-  routine,
-  checked,
-  setChecked,
-}: {
-  routine: Product[];
-  checked: Record<string, boolean>;
-  setChecked: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-}) {
-  return (
-    <div className="space-y-3">
-      {routine.map((item, index) => (
-        <Card key={item.id} className="p-4 flex justify-between items-center">
-          <div>
-            <p className="font-medium">
-              {index + 1}. {item.category}
-            </p>
-            <p className="text-sm text-muted-foreground">{item.name}</p>
-          </div>
-
-          <Checkbox
-            checked={!!checked[item.id]}
-            onCheckedChange={(val) =>
-              setChecked((prev) => ({
-                ...prev,
-                [item.id]: !!val,
-              }))
-            }
-          />
-        </Card>
-      ))}
     </div>
   );
 }
