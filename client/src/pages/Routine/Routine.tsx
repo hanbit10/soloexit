@@ -16,6 +16,8 @@ const mockProducts: Product[] = [
     category: "cleanser",
     frequencyPerWeek: 7,
     activeDays: [1, 2, 3, 4, 5, 6, 7],
+    am: false,
+    pm: true,
   },
   {
     id: "toner-001",
@@ -23,6 +25,8 @@ const mockProducts: Product[] = [
     category: "toner",
     frequencyPerWeek: 7,
     activeDays: [1, 2, 3, 4, 5, 6, 7],
+    am: false,
+    pm: true,
   },
   {
     id: "serum-001",
@@ -30,6 +34,8 @@ const mockProducts: Product[] = [
     category: "serum",
     frequencyPerWeek: 5,
     activeDays: [1, 2, 3, 4, 5],
+    am: false,
+    pm: true,
   },
   {
     id: "active-001",
@@ -37,6 +43,8 @@ const mockProducts: Product[] = [
     category: "serum",
     frequencyPerWeek: 2,
     activeDays: [2, 5],
+    am: false,
+    pm: true,
   },
   {
     id: "active-002",
@@ -44,6 +52,8 @@ const mockProducts: Product[] = [
     category: "serum",
     frequencyPerWeek: 1,
     activeDays: [6],
+    am: false,
+    pm: true,
   },
   {
     id: "moisturizer-001",
@@ -51,6 +61,8 @@ const mockProducts: Product[] = [
     category: "moisturizer",
     frequencyPerWeek: 7,
     activeDays: [1, 2, 3, 4, 5, 6, 7],
+    am: false,
+    pm: true,
   },
   {
     id: "sunscreen-001",
@@ -58,6 +70,8 @@ const mockProducts: Product[] = [
     category: "sunscreen",
     frequencyPerWeek: 7,
     activeDays: [1, 2, 3, 4, 5, 6, 7],
+    am: false,
+    pm: true,
   },
 ];
 
