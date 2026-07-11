@@ -8,7 +8,7 @@ export function RoutineList({ products }: { products: Product[] }) {
   return (
     <Card>
       <CardContent className="space-y-4 flex justify-center">
-        <Carousel className="w-full max-w-48 sm:max-w-xs md:max-w-sm">
+        <Carousel className="w-full  sm:max-w-xl md:max-w-xl">
           <CarouselContent className="-ml-1">
             <CarouselItem className="basis-1/2 pl-1 lg:basis-1/3">
               <div className="p-1">
