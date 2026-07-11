@@ -1,4 +1,4 @@
-import { ActivityIcon, HomeIcon, MoonIcon, SettingsIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
+import { ActivityIcon, Clock8, HomeIcon, MoonIcon, SettingsIcon, SparklesIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -10,6 +10,8 @@ const SideNavbar = () => {
     { path: "/", label: "Home", icon: HomeIcon },
     { path: "/food", label: "Food", icon: UtensilsIcon },
     { path: "/activity", label: "Activity", icon: ActivityIcon },
+    { path: "/routine", label: "Routine", icon: SparklesIcon },
+    { path: "/timer", label: "Timer", icon: Clock8 },
     { path: "/profile", label: "Profile", icon: UserIcon },
     { path: "/settings", label: "Settings", icon: SettingsIcon },
   ];

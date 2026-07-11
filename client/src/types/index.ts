@@ -103,3 +103,23 @@ export const initialState: AppContextType = {
   allActivityLogs: [],
   setAllActivityLogs: () => {},
 };
+
+// Set Types for Routine and Product
+export type RoutineTime = "AM" | "PM";
+
+export type ProductCategory = "cleanser" | "toner" | "serum" | "eye_cream" | "moisturizer" | "oil" | "sunscreen" | "exfoliant" | "retinol";
+
+export interface Product {
+  id: string;
+  name: string;
+  category: ProductCategory;
+
+  am: boolean;
+  pm: boolean;
+
+  // frequency system (important for retinol / acids)
+  frequencyPerWeek?: number;
+  activeDays?: number[];
+
+  lastUsedAt?: string;
+}
