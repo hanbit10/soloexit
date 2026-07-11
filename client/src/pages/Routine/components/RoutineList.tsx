@@ -27,7 +27,6 @@ export function RoutineList({ products }: { products: Product[] }) {
                     <CardContent className="flex aspect-square items-center justify-center p-6">
                       <div className="text-center">
                         <span className="text-2xl font-semibold">{index + 1}</span>
-
                         <p className="mt-2 text-sm">{product.name}</p>
                       </div>
                     </CardContent>
