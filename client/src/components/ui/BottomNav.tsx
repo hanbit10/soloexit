@@ -1,4 +1,4 @@
-import { ActivityIcon, HomeIcon, UserIcon, UtensilsIcon } from "lucide-react";
+import { ActivityIcon, HomeIcon, SparklesIcon, UserIcon, UtensilsIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const BottomNav = () => {
@@ -6,6 +6,7 @@ const BottomNav = () => {
     { path: "/", label: "Home", icon: HomeIcon },
     { path: "/food", label: "Food", icon: UtensilsIcon },
     { path: "/activity", label: "Activity", icon: ActivityIcon },
+    { path: "/routine", label: "Routine", icon: SparklesIcon },
     { path: "/profile", label: "Profile", icon: UserIcon },
   ];
   return (
