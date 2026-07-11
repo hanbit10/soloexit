@@ -3,7 +3,9 @@
 import { useMemo, useState } from "react";
 import { buildRoutine } from "@/lib/buildRoutine";
 import type { Product } from "@/types/index";
-import { RoutineHeader, RoutineToggle, RoutineProgress } from "../Routine/components/RoutineComponents";
+import { RoutineToggle, RoutineProgress } from "../Routine/components/RoutineComponents";
+import { RoutineHeader } from "../Routine/components/RoutineHeader";
+import { RoutineChart } from "./components/RoutineChart";
 
 // TEMP mock (later: Strapi)
 const mockProducts: Product[] = [];
@@ -27,6 +29,7 @@ export default function RoutinePage() {
   return (
     <div className="page-container">
       <RoutineHeader />
+      <RoutineChart />
       <RoutineToggle time={time} setTime={setTime} />
       <RoutineProgress value={progress} />
     </div>
