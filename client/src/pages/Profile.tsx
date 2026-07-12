@@ -14,6 +14,7 @@ import api from "../configs/api";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import EightFigure from "@/components/EightFigure";
 
 const Profile = () => {
   const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();
@@ -248,6 +249,7 @@ const Profile = () => {
             </CardHeader>
 
             <CardContent>
+              <EightFigure />
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-blue-50 dark:bg-slate-700 rounded-xl">
                   <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>

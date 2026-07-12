@@ -5,7 +5,7 @@ import { buildRoutine } from "@/lib/buildRoutine";
 import type { Product } from "@/types/index";
 import { RoutineToggle, RoutineProgress } from "../Routine/components/RoutineComponents";
 import { RoutineHeader } from "../Routine/components/RoutineHeader";
-import { RoutineChart } from "./components/RoutineChart";
+import { RoutineCheckbox } from "./components/RoutineCheckbox";
 import { RoutineList } from "./components/RoutineList";
 
 // TEMP mock (later: Strapi)
@@ -95,7 +95,7 @@ export default function RoutinePage() {
     <div className="page-container">
       <RoutineHeader />
       <RoutineList products={mockProducts} />
-      <RoutineChart />
+      <RoutineCheckbox products={mockProducts} />
 
       <RoutineToggle time={time} setTime={setTime} />
       <RoutineProgress value={progress} />
