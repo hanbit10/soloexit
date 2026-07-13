@@ -4,7 +4,12 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import type { Product } from "@/types";
 import { Plus } from "lucide-react";
 
-export function RoutineList({ products }: { products: Product[] }) {
+type RoutineListProps = {
+  products: Product[];
+  onAdd: () => void;
+};
+
+export function RoutineList({ products, onAdd }: RoutineListProps) {
   return (
     <Card>
       <CardContent className="space-y-4 flex justify-center">
@@ -12,7 +17,7 @@ export function RoutineList({ products }: { products: Product[] }) {
           <CarouselContent className="-ml-1">
             <CarouselItem className="basis-1/2 pl-1 lg:basis-1/3">
               <div className="p-1">
-                <Card>
+                <Card onClick={onAdd}>
                   <CardContent className="flex flex-col aspect-square items-center justify-center p-6">
                     <div className="text-center">Add to routine</div>
                     <Plus className="w-6 h-6 m-2" />

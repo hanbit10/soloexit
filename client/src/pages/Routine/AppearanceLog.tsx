@@ -7,6 +7,7 @@ import { RoutineToggle, RoutineProgress } from "./components/RoutineComponents";
 import { RoutineCheckbox } from "./components/RoutineCheckbox";
 import { RoutineList } from "./components/RoutineList";
 import { Header } from "@/components/ui/Header";
+import { RoutineAdd } from "./components/RoutineAdd";
 
 // TEMP mock (later: Strapi)
 const mockProducts: Product[] = [
@@ -78,6 +79,7 @@ const mockProducts: Product[] = [
 export default function RoutinePage() {
   const [time, setTime] = useState<"AM" | "PM">("AM");
   const [checked] = useState<Record<string, boolean>>({});
+  const [showForm, setShowForm] = useState(false);
 
   const dayIndex = new Date().getDay();
 
@@ -94,7 +96,8 @@ export default function RoutinePage() {
   return (
     <div className="page-container">
       <Header title="Routine" description="Track your skincare routine" rightLabel="Day" rightValue={dayIndex} />
-      <RoutineList products={mockProducts} />
+      {!showForm && <RoutineList products={mockProducts} onAdd={() => setShowForm(true)} />}
+      {showForm && <RoutineAdd />}
       <RoutineCheckbox products={mockProducts} />
 
       <RoutineToggle time={time} setTime={setTime} />
