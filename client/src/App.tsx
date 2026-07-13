@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
-import FoodLog from "./pages/FoodLog";
+import FoodLog from "./pages/NutritionLog";
 import ActivityLog from "./pages/ActivityLog";
 import Profile from "./pages/Profile";
 import { useAppContext } from "./context/AppContext";

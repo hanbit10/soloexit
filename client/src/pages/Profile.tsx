@@ -14,7 +14,7 @@ import api from "../configs/api";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import EightFigure from "@/components/EightFigure";
+import EightFigure from "@/components/Figure";
 
 const Profile = () => {
   const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();

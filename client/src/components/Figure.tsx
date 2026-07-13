@@ -1,19 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // components/life-diamond.tsx
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+// import { useState } from "react";
 
 const stats = [
-  { label: "Health", value: 90, emoji: "💪" },
-  { label: "Food", value: 82, emoji: "❤️" },
-  { label: "Skin", value: 88, emoji: "✨" },
-  { label: "Intelligence", value: 74, emoji: "🧠" },
-  { label: "Wealth", value: 60, emoji: "💰" },
-  { label: "Order", value: 78, emoji: "📅" },
-  { label: "Social", value: 70, emoji: "🤝" },
-  { label: "Mind", value: 84, emoji: "😊" },
+  { label: "Activity", value: 60, emoji: "💪" },
+  { label: "Appearance", value: 82, emoji: "❤️" },
+  { label: "Nutrition", value: 88, emoji: "✨" },
 ];
 
-const CENTER = 180;
+const CENTER = 210;
 const RADIUS = 120;
 
 function polarToCartesian(angle: number, value: number) {
@@ -35,14 +32,21 @@ export default function EightFigure() {
     })
     .join(" ");
 
+  // const [hoveredStat, setHoveredStat] = useState<{
+  //   label: string;
+  //   value: number;
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+
   return (
     <Card className="max-w-5xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl">Your Stats</CardTitle>
       </CardHeader>
 
-      <CardContent className="grid gap-8 lg:grid-cols-2">
-        <svg viewBox="0 0 360 360" className="w-full max-w-md mx-auto">
+      <CardContent className="grid gap-2 lg:grid-cols-2">
+        <svg viewBox="0 0 420 420" className="w-full max-w-md mx-auto overflow-visible">
           {/* Grid */}
 
           {[25, 50, 75, 100].map((ring) => (
