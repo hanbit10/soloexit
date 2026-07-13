@@ -10,7 +10,7 @@ import Loading from "./components/ui/Loading";
 import Onboarding from "./pages/Onboarding";
 import { Toaster } from "react-hot-toast";
 import Settings from "./pages/Settings/Settings";
-import Routine from "./pages/Routine/AppearanceLog";
+import Routine from "./pages/Routine/BeautyLog";
 import Timer from "./pages/Timer/Timer";
 
 const App = () => {

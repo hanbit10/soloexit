@@ -7,7 +7,7 @@ import { RoutineToggle, RoutineProgress } from "./components/RoutineComponents";
 import { RoutineCheckbox } from "./components/RoutineCheckbox";
 import { RoutineList } from "./components/RoutineList";
 import { Header } from "@/components/ui/Header";
-import { RoutineAdd } from "./components/RoutineAdd";
+import { RoutineAdd } from "./components/AddProduct";
 
 // TEMP mock (later: Strapi)
 const mockProducts: Product[] = [
@@ -95,7 +95,7 @@ export default function RoutinePage() {
 
   return (
     <div className="page-container">
-      <Header title="Routine" description="Track your skincare routine" rightLabel="Day" rightValue={dayIndex} />
+      <Header title="Appearance Log" description="Track your skincare routine" rightLabel="Day" rightValue={dayIndex} />
       {!showForm && <RoutineList products={mockProducts} onAdd={() => setShowForm(true)} />}
       {showForm && <RoutineAdd />}
       <RoutineCheckbox products={mockProducts} />

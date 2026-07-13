@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 
 type RoutineAddProps = {
@@ -12,14 +13,14 @@ type RoutineAddProps = {
 type Routine = {
   name: string;
   category: string | null;
-  time: string | null;
+  time: ("am" | "pm")[];
 };
 
 export function RoutineAdd({ onSubmit }: RoutineAddProps) {
   const [routine, setRoutine] = useState<Routine>({
     name: "",
     category: "",
-    time: "",
+    time: [] as ("am" | "pm")[],
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -30,7 +31,7 @@ export function RoutineAdd({ onSubmit }: RoutineAddProps) {
     setRoutine({
       name: "",
       category: "",
-      time: "",
+      time: [],
     });
   }
 
@@ -43,7 +44,7 @@ export function RoutineAdd({ onSubmit }: RoutineAddProps) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Routine Name</Label>
+            <Label htmlFor="name">Product Name</Label>
 
             <Input
               id="name"
@@ -89,25 +90,35 @@ export function RoutineAdd({ onSubmit }: RoutineAddProps) {
           <div className="space-y-2">
             <Label>Time</Label>
 
-            <Select
-              value={routine.time}
-              onValueChange={(value) =>
-                setRoutine({
-                  ...routine,
-                  time: value,
-                })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="AM / PM" />
-              </SelectTrigger>
+            <div className="flex gap-6">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="am"
+                  checked={routine.time.includes("am")}
+                  onCheckedChange={(checked) => {
+                    setRoutine({
+                      ...routine,
+                      time: checked ? [...routine.time, "am"] : routine.time.filter((t) => t !== "am"),
+                    });
+                  }}
+                />
+                <Label htmlFor="am">Morning</Label>
+              </div>
 
-              <SelectContent>
-                <SelectItem value="am">Morning</SelectItem>
-
-                <SelectItem value="pm">Evening</SelectItem>
-              </SelectContent>
-            </Select>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="pm"
+                  checked={routine.time.includes("pm")}
+                  onCheckedChange={(checked) => {
+                    setRoutine({
+                      ...routine,
+                      time: checked ? [...routine.time, "pm"] : routine.time.filter((t) => t !== "pm"),
+                    });
+                  }}
+                />
+                <Label htmlFor="pm">Evening</Label>
+              </div>
+            </div>
           </div>
 
           <Button type="submit" className="w-full">

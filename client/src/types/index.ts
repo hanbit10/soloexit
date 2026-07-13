@@ -120,6 +120,5 @@ export interface Product {
   // frequency system (important for retinol / acids)
   frequencyPerWeek?: number;
   activeDays?: number[];
-
   lastUsedAt?: string;
 }
