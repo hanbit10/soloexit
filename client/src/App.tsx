@@ -1,16 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
-import Dashboard from "./pages/Dashboard";
-import FoodLog from "./pages/FoodLog";
-import ActivityLog from "./pages/ActivityLog";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import FoodLog from "./pages/Nutrition/FoodLog";
+import ActivityLog from "./pages/Activity/ActivityLog";
 import Profile from "./pages/Profile";
 import { useAppContext } from "./context/AppContext";
 import Login from "./pages/Login";
 import Loading from "./components/ui/Loading";
 import Onboarding from "./pages/Onboarding";
 import { Toaster } from "react-hot-toast";
-import Settings from "./pages/Settings";
-import Routine from "./pages/Routine/Routine";
+import Settings from "./pages/Settings/Settings";
+import Routine from "./pages/Routine/AppearanceLog";
 import Timer from "./pages/Timer/Timer";
 
 const App = () => {

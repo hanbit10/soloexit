@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getMotivationalMessage } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
-import type { ActivityEntry, FoodEntry } from "../types";
+import { getMotivationalMessage } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
+import type { ActivityEntry, FoodEntry } from "../../types";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Progress } from "@/components/ui/progress";
 import { Activity, FlameIcon, HamburgerIcon, Ruler, ScaleIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
-import CaloriesChart from "../components/CaloriesChart";
+import CaloriesChart from "../../components/CaloriesChart";
 
 const Dashboard = () => {
   const { user, allActivityLogs, allFoodLogs } = useAppContext();

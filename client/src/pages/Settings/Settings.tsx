@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemeContext";
+import { Header } from "@/components/ui/Header";
 
 export default function Settings() {
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -15,11 +16,7 @@ export default function Settings() {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div className="page-header">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Profile</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your settings</p>
-      </div>
+      <Header title="Settings" description="Manage your settings" />
 
       {/* Content */}
       <div className="profile-content space-y-6">

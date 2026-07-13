@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-import { TimerSelector, TimerDisplay, TimerControls, TimerHeader } from "../Timer/components/TimerComponents";
+import { TimerSelector, TimerDisplay, TimerControls } from "../Timer/components/TimerComponents";
 
 import { useTimer } from "@/hooks/useTimer";
+import { Header } from "@/components/ui/Header";
 
 export default function TimerPage() {
   const [minutes, setMinutes] = useState(8);
@@ -11,8 +12,7 @@ export default function TimerPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-10">
-      <TimerHeader />
-
+      <Header title="Timer" description="Focus. Track. Repeat." />
       <TimerSelector
         selected={minutes}
         onSelect={(value) => {

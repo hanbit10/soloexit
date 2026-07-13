@@ -1,19 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
 
-export function TimerHeader() {
-  return (
-    <div className="page-header">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Timer</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Focus. Track. Repeat.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 interface Props {
   running: boolean;
   start: () => void;

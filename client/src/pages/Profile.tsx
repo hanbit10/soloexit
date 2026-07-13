@@ -15,6 +15,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import EightFigure from "@/components/Figure";
+import { Header } from "@/components/ui/Header";
 
 const Profile = () => {
   const { user, logout, fetchUser, allFoodLogs, allActivityLogs } = useAppContext();
@@ -77,11 +78,7 @@ const Profile = () => {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div className="page-header">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Profile</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your settings</p>
-      </div>
+      <Header title="Profile" description="Manage your settings" />
       <div className="profile-content">
         {/* left col */}
         <Card>

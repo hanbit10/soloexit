@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
-import { useAppContext } from "../context/AppContext";
-import type { FoodEntry, FoodFormData } from "../types";
-import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../assets/assets";
+import { useAppContext } from "../../context/AppContext";
+import type { FoodEntry, FoodFormData } from "../../types";
+import { mealColors, mealIcons, mealTypeOptions, quickActivitiesFoodLog } from "../../assets/assets";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Loader2Icon, PlusIcon, SparkleIcon, Trash2Icon, UtensilsCrossedIcon } from "lucide-react";
 // import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
-import api from "../configs/api";
+import api from "../../configs/api";
 
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Header } from "@/components/ui/Header";
 
 const FoodLog = () => {
   const { allFoodLogs, setAllFoodLogs } = useAppContext();
@@ -135,18 +136,7 @@ const FoodLog = () => {
   return (
     <div className="page-container">
       {/* Header */}
-      <div className="page-header">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">Food Log</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Track your daily intake</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-slate-500 dark:text-slate-400">Today's Total</p>
-            <p className="text-xl font-bold text-slate-600 dark:text-slate-200">{totalCalories} kcal</p>
-          </div>
-        </div>
-      </div>
+      <Header title="Food Log" description="Track your daily food intake" rightLabel="Total Calories" rightValue={totalCalories} />
       <div className="page-content-grid">
         {/* Quick Add Section */}
         {!showForm && (

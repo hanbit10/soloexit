@@ -3,10 +3,10 @@
 import { useMemo, useState } from "react";
 import { buildRoutine } from "@/lib/buildRoutine";
 import type { Product } from "@/types/index";
-import { RoutineToggle, RoutineProgress } from "../Routine/components/RoutineComponents";
-import { RoutineHeader } from "../Routine/components/RoutineHeader";
+import { RoutineToggle, RoutineProgress } from "./components/RoutineComponents";
 import { RoutineCheckbox } from "./components/RoutineCheckbox";
 import { RoutineList } from "./components/RoutineList";
+import { Header } from "@/components/ui/Header";
 
 // TEMP mock (later: Strapi)
 const mockProducts: Product[] = [
@@ -93,7 +93,7 @@ export default function RoutinePage() {
 
   return (
     <div className="page-container">
-      <RoutineHeader />
+      <Header title="Routine" description="Track your skincare routine" rightLabel="Day" rightValue={dayIndex} />
       <RoutineList products={mockProducts} />
       <RoutineCheckbox products={mockProducts} />
 

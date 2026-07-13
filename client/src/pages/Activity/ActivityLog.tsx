@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
-import type { ActivityEntry } from "../types";
+import { useAppContext } from "../../context/AppContext";
+import type { ActivityEntry } from "../../types";
 
-import { quickActivities } from "../assets/assets";
+import { quickActivities } from "../../assets/assets";
 import { ActivityIcon, DumbbellIcon, PlusIcon, TimerIcon, Trash2Icon } from "lucide-react";
 // import Input from "../components/Input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/Card";
 import toast from "react-hot-toast";
 // import mockApi from "../assets/mockApi";
-import api from "../configs/api";
+import api from "../../configs/api";
 
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Header } from "@/components/ui/Header";
 
 const ActivityLog = () => {
   const { allActivityLogs, setAllActivityLogs } = useAppContext();
@@ -101,19 +102,7 @@ const ActivityLog = () => {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div className="page-header">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-200 dark:text-white">Activity Log</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Track your workouts</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-slate-500 dark:text-slate-400">Active Today</p>
-            <p className="text-xl font-bold text-blue-600 dark:text-blue-200">{totalMinutes} min</p>
-          </div>
-        </div>
-      </div>
+      <Header title="Activity Log" description="Track your workouts" rightLabel="Active Today" rightValue={totalMinutes} />
 
       <div className="page-content-grid">
         {/* Quick Add Section */}
