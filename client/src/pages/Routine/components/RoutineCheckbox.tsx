@@ -15,6 +15,7 @@ export function RoutineCheckbox({ products }: { products: Product[] }) {
       setMorningRows(new Set());
     }
   };
+
   const handleMorningRow = (id: string, checked: boolean) => {
     const next = new Set(morningRows);
 
@@ -46,6 +47,7 @@ export function RoutineCheckbox({ products }: { products: Product[] }) {
     <div className="space-y-4 grid-rows-2">
       <div className="flex gap-4 justify-center">
         <Card>
+          Card
           <CardHeader>Morning Routine</CardHeader>
           <CardContent>
             <Table>
